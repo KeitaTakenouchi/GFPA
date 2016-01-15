@@ -1,7 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlFlowGraph;
 
 import java.util.Arrays;
 
@@ -84,7 +83,7 @@ public class ControlFlowGraphTest {
 		ControlFlowGraph reversedGraph = original.getReversedGraph();
 
 		{
-			int expected = -1;
+			int expected = -5;
 			int actual = reversedGraph.getEntryId();
 			assertEquals(expected, actual);
 		}
