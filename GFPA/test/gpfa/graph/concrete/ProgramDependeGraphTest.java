@@ -1,7 +1,10 @@
 package gpfa.graph.concrete;
 
+import static org.junit.Assert.*;
 import gnu.trove.set.hash.TIntHashSet;
 import gpfa.graph.info.Variable;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -49,8 +52,6 @@ public class ProgramDependeGraphTest
 		cfgraph.putEdge(8, 9);
 
 		ControlDependenceGraph cdgraph = new ControlDependenceGraph(cfgraph);
-
-
 		DataDependenceGraph dfgraph = new DataDependenceGraph(cfgraph);
 		dfgraph.def(1, new Variable("sum"));
 		dfgraph.def(2, new Variable("i"));
@@ -64,14 +65,19 @@ public class ProgramDependeGraphTest
 		dfgraph.buildEdges();
 
 		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph(dfgraph, cdgraph);
-
-//		cdgraph.dumpEdges("Control Dependence Graph");
-//		dfgraph.dumpEdges("Data Flow Graph");
+		{
+			int[] expected = {2,3,5,6,8};
+			int[] actual = pdgraph.backwardSlice(8);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {1,2,3,4,5,6,7};
+			int[] actual = pdgraph.backwardSlice(7);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
 //		pdgraph.dumpEdges("Program Dependency Graph");
-
-//		dumpCode(source, new TIntHashSet(pdgraph.backwardSlice(8)));
-//		dumpCode(source, new TIntHashSet(pdgraph.backwardSlice(7)));
-//		dumpCode(source, new TIntHashSet(pdgraph.backwardSlice(5)));
 	}
 
 	private void dumpCode(String[] source, TIntHashSet set)
