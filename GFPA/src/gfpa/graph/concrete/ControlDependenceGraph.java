@@ -1,4 +1,4 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
 

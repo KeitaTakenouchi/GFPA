@@ -1,8 +1,12 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
+import gfpa.graph.concrete.ControlDependenceGraph;
+import gfpa.graph.concrete.ControlFlowGraph;
+import gfpa.graph.concrete.DataDependenceGraph;
+import gfpa.graph.concrete.ProgramDependenceGraph;
+import gfpa.graph.info.Variable;
 import gnu.trove.set.hash.TIntHashSet;
-import gpfa.graph.info.Variable;
 
 import java.util.Arrays;
 

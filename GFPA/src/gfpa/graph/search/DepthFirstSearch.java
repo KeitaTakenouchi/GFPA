@@ -1,4 +1,4 @@
-package gpfa.graph.search;
+package gfpa.graph.search;
 
 import gfpa.graph.common.DirectedGraph;
 import gnu.trove.set.hash.TIntHashSet;

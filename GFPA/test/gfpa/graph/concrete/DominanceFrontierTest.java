@@ -1,8 +1,8 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gpfa.graph.concrete.ControlFlowGraph;
-import gpfa.graph.concrete.DominanceFrontier;
+import gfpa.graph.concrete.ControlFlowGraph;
+import gfpa.graph.concrete.DominanceFrontier;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package gpfa.graph.info;
+package gfpa.graph.info;
 
 
 public class Variable

@@ -1,9 +1,9 @@
 package gfpa.graph.common;
 
+import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
-import gpfa.graph.search.EdgeVisitor;
 
 import java.util.Arrays;
 import java.util.HashMap;

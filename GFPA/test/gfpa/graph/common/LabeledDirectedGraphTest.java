@@ -1,4 +1,4 @@
-package gpfa.graph.common;
+package gfpa.graph.common;
 
 import static org.junit.Assert.*;
 import gfpa.graph.common.LabeledDirectedGraph;

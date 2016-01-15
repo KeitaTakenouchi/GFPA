@@ -1,9 +1,9 @@
-package gpfa.graph.search;
+package gfpa.graph.search;
 
 import static org.junit.Assert.*;
-import gpfa.graph.concrete.ControlFlowGraph;
-import gpfa.graph.search.DepthFirstSearch;
-import gpfa.graph.search.DepthFirstSearchVisitor;
+import gfpa.graph.concrete.ControlFlowGraph;
+import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.DepthFirstSearchVisitor;
 
 import java.util.Arrays;
 

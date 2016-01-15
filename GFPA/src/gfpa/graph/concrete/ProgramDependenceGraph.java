@@ -1,7 +1,7 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import gfpa.graph.common.LabeledDirectedGraph;
-import gpfa.graph.info.Variable;
+import gfpa.graph.info.Variable;
 
 public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 {

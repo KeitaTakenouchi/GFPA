@@ -1,7 +1,7 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gpfa.graph.concrete.ControlFlowGraph;
+import gfpa.graph.concrete.ControlFlowGraph;
 
 import java.util.Arrays;
 

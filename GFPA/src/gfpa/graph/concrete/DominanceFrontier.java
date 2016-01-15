@@ -1,4 +1,4 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;

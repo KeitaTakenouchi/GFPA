@@ -1,9 +1,9 @@
-package gpfa.graph.common;
+package gfpa.graph.common;
 
 import static org.junit.Assert.*;
 import gfpa.graph.common.DirectedGraph;
+import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.set.hash.TIntHashSet;
-import gpfa.graph.search.EdgeVisitor;
 
 import java.util.Arrays;
 

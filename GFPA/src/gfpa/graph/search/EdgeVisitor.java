@@ -1,4 +1,4 @@
-package gpfa.graph.search;
+package gfpa.graph.search;
 
 public interface EdgeVisitor
 {

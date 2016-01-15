@@ -1,9 +1,9 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
+import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.DepthFirstSearchVisitor;
 import gnu.trove.set.hash.TIntHashSet;
-import gpfa.graph.search.DepthFirstSearch;
-import gpfa.graph.search.DepthFirstSearchVisitor;
 
 import java.util.HashMap;
 

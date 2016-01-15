@@ -1,8 +1,8 @@
-package gpfa.graph.concrete;
+package gfpa.graph.concrete;
 
 import gfpa.graph.common.LabeledDirectedGraph;
+import gfpa.graph.info.Variable;
 import gnu.trove.set.hash.TIntHashSet;
-import gpfa.graph.info.Variable;
 
 import java.util.Arrays;
 import java.util.HashMap;
