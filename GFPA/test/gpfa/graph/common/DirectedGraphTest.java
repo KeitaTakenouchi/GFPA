@@ -2,6 +2,8 @@ package gpfa.graph.common;
 
 import static org.junit.Assert.*;
 import gfpa.graph.common.DirectedGraph;
+import gnu.trove.set.hash.TIntHashSet;
+import gpfa.graph.search.EdgeVisitor;
 
 import java.util.Arrays;
 
@@ -172,6 +174,34 @@ public class DirectedGraphTest
 		{
 			int[] expected = {5};
 			int[] actual = graph.getSinks();
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+	}
+
+	@Test
+	public void test06()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		graph.putEdge(0, 1);
+		graph.putEdge(1, 4);
+		graph.putEdge(1, 5);
+		graph.putEdge(4, 5);
+
+		TIntHashSet fromSet = new TIntHashSet();
+		graph.forEachEdge(new EdgeVisitor()
+		{
+			@Override
+			public boolean perform(int from, int to)
+			{
+				fromSet.add(from);
+				return true;
+			}
+		});
+
+		{
+			int[] expected = {0,1,4};
+			int[] actual = fromSet.toArray();
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}

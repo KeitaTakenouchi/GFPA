@@ -3,6 +3,7 @@ package gfpa.graph.common;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
+import gpfa.graph.search.EdgeVisitor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,6 +149,18 @@ public class DirectedGraph
 			sum = sum + set.size();
 		}
 		return sum;
+	}
+
+	public void forEachEdge(EdgeVisitor visitor)
+	{
+		for(int from : edges.keySet())
+		{
+			for(int to : edges.get(from).toArray())
+			{
+				boolean isContinue = visitor.perform(from, to);
+				if(!isContinue) return;
+			}
+		}
 	}
 
 	/**
