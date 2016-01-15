@@ -26,7 +26,7 @@ public class DirectedGraph
 	{
 		if(reverse == null)
 		{
-			createReverｓeGraphInstance();
+			createReverseGraphInstance();
 			reverse.reverse = this;
 		}
 
@@ -181,7 +181,7 @@ public class DirectedGraph
 		return from +" -> "+ to;
 	}
 
-	protected void createReverｓeGraphInstance()
+	protected void createReverseGraphInstance()
 	{
 		reverse = new DirectedGraph();
 	}
