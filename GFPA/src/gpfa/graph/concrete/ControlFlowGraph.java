@@ -13,7 +13,7 @@ public class ControlFlowGraph extends DirectedGraph
 	}
 
 	@Override
-	protected void createReverｓeGraph()
+	protected void createReverｓeGraphInstance()
 	{
 		//entryId is not used.
 		this.reverse = new ControlFlowGraph(dummyExit);
