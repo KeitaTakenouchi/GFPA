@@ -16,8 +16,8 @@ public class ProgramDependeGraphTest
 	 *4:		sum = sum+i;
 	 *5:		i = i + 1;
 	 *6:	}
-	 *7:	printf(“%d \n”, sum);
-	 *8:	printf(“%d \n”, i);
+	 *7:	printf("%d \n", sum);
+	 *8:	printf("%d \n", i);
 	 *9:}
 	 */
 	@Test
@@ -31,8 +31,8 @@ public class ProgramDependeGraphTest
 		source[4] = "\t\tsum = sum + i;";
 		source[5] = "\t\ti = i + 1;";
 		source[6] = "\t}";
-		source[7] = "\tprintf(“%d \\n”, sum);";
-		source[8] = "\tprintf(“%d \\n”, i);";
+		source[7] = "\tprintf(\"%d \\n\", sum);";
+		source[8] = "\tprintf(\"%d \\n\", i);";
 		source[9] = "}";
 
 		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
