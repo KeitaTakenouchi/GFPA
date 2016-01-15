@@ -6,6 +6,10 @@ import gnu.trove.stack.array.TIntArrayStack;
 
 public class DepthFirstSearch {
 
+	private DepthFirstSearch()
+	{
+	}
+
 	public static void search(DirectedGraph graph, int startId, DepthFirstSearchVisitor visitor)
 	{
 		TIntArrayStack worklist = new TIntArrayStack();
