@@ -5,7 +5,6 @@ import gfpa.graph.common.DirectedGraph;
 public class ControlFlowGraph extends DirectedGraph
 {
 	private int entryId;
-	private static final int dummyExit = -1;
 
 	public ControlFlowGraph(int entryId)
 	{
@@ -16,7 +15,7 @@ public class ControlFlowGraph extends DirectedGraph
 	protected void createReverseGraphInstance()
 	{
 		//entryId is not used.
-		this.reverse = new ControlFlowGraph(dummyExit);
+		this.reverse = new ControlFlowGraph(-1000);
 	}
 
 	public int getEntryId()
@@ -36,14 +35,23 @@ public class ControlFlowGraph extends DirectedGraph
 		}
 		else
 		{
-			reverse = new ControlFlowGraph(dummyExit);
+			int tmpExit = min(nodes.toArray()) -1;
+			reverse = new ControlFlowGraph(tmpExit);
 			for(int i : sinks)
 			{
-				reverse.putEdge(dummyExit, i);
+				reverse.putEdge(tmpExit, i);
 			}
 		}
 		copyReverseGraphTo(reverse);
 		return reverse;
+	}
+
+	private int min(int[] arr)
+	{
+		int min = arr[0];
+		for(int i = 0 ; i < arr.length ; i++)
+			min = (arr[i] < min)? arr[i] : min;
+		return min;
 	}
 
 }
