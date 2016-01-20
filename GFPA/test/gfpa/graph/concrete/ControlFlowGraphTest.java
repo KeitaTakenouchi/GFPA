@@ -83,7 +83,7 @@ public class ControlFlowGraphTest {
 		ControlFlowGraph reversedGraph = original.getReversedGraph();
 
 		{
-			int expected = -5;
+			int expected = -1;
 			int actual = reversedGraph.getEntryId();
 			assertEquals(expected, actual);
 		}
@@ -128,6 +128,23 @@ public class ControlFlowGraphTest {
 			int actual = cfgraph.getReversedGraph().getEntryId();
 			assertEquals(expected, actual);
 		}
+	}
+
+	@Test
+	public void test05()
+	{
+		ControlFlowGraph a = new ControlFlowGraph(0);
+		a.putEdge(0, 1);
+		a.putEdge(1, 2);
+		a.putEdge(2, 3);
+		a.putEdge(1, 3);
+		ControlFlowGraph b = new ControlFlowGraph(0);
+		b.putEdge(0, 1);
+		b.putEdge(1, 2);
+		b.putEdge(2, 3);
+		b.putEdge(1, 3);
+		assertTrue(a.equals(b));
+		assertTrue(b.equals(a));
 	}
 
 }
