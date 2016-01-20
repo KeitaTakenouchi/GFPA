@@ -1,7 +1,6 @@
 package gfpa.graph.common;
 
 import static org.junit.Assert.*;
-import gfpa.graph.common.DirectedGraph;
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.set.hash.TIntHashSet;
 
@@ -205,6 +204,23 @@ public class DirectedGraphTest
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
+	}
+
+	@Test
+	public void test07()
+	{
+		DirectedGraph a = new DirectedGraph();
+		a.putEdge(0, 1);
+		a.putEdge(1, 2);
+		a.putEdge(2, 3);
+		a.putEdge(1, 3);
+		DirectedGraph b = new DirectedGraph();
+		b.putEdge(0, 1);
+		b.putEdge(1, 2);
+		b.putEdge(2, 3);
+		b.putEdge(1, 3);
+		assertTrue(a.equals(b));
+		assertTrue(b.equals(a));
 	}
 
 }
