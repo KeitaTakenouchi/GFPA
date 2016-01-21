@@ -1,10 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlDependenceGraph;
-import gfpa.graph.concrete.ControlFlowGraph;
-import gfpa.graph.concrete.DataDependenceGraph;
-import gfpa.graph.concrete.ProgramDependenceGraph;
 import gfpa.graph.info.Variable;
 import gnu.trove.set.hash.TIntHashSet;
 
@@ -70,16 +66,22 @@ public class ProgramDependeGraphTest
 
 		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph(dfgraph, cdgraph);
 		{
-			int[] expected = {2,3,5,6,8};
+			int[] expected = {0,2,3,5,6,8};
 			int[] actual = pdgraph.backwardSlice(8);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {1,2,3,4,5,6,7};
+			int[] expected = {0,1,2,3,4,5,6,7};
 			int[] actual = pdgraph.backwardSlice(7);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
+		}
+		{
+			assertTrue(pdgraph.hasDataDependent(1, 4));
+			assertTrue(pdgraph.hasDataDependent(5, 8));
+			assertTrue(pdgraph.hasControlDependent(3, 4));
+			assertTrue(pdgraph.hasControlDependent(3, 5));
 		}
 //		pdgraph.dumpEdges("Program Dependency Graph");
 	}

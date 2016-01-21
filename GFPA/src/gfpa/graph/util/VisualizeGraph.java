@@ -95,7 +95,7 @@ public class VisualizeGraph
 				HashSet<Variable> labels = graph.getLabels(from, to);
 				if(labels == null)
 				{
-					gv.addln(from + " -> " + to);
+					gv.addln(from + " -> " + to +" [color = red];");
 				}
 				else
 				{
@@ -103,7 +103,7 @@ public class VisualizeGraph
 					for(Variable v : labels)
 						bf.append(v.toString()+",");
 					bf.deleteCharAt(bf.length()-1);
-					gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\"];");
+					gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = darkgreen];");
 				}
 				return true;
 			}

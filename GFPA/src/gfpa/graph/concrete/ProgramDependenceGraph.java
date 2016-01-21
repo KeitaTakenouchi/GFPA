@@ -5,10 +5,14 @@ import gfpa.graph.info.Variable;
 
 public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 {
-	public ProgramDependenceGraph(DataDependenceGraph datafg, ControlDependenceGraph cdg)
+	private DataDependenceGraph ddgraph;
+	private ControlDependenceGraph cdgraph;
+	public ProgramDependenceGraph(DataDependenceGraph ddgraph, ControlDependenceGraph cdgraph)
 	{
-		importEdgesFrom(datafg);
-		importEdgesFrom(cdg);
+		this.ddgraph = ddgraph;
+		this.cdgraph = cdgraph;
+		importEdgesFrom(ddgraph);
+		importEdgesFrom(cdgraph);
 	}
 
 	public ProgramDependenceGraph(DataDependenceGraph datafg, ControlFlowGraph cfg)
@@ -24,6 +28,16 @@ public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 	public int[] forwardSlice(int i)
 	{
 		return reachableFrom(i);
+	}
+
+	public boolean hasDataDependent(int parent, int child)
+	{
+		return ddgraph.isSuccessor(parent, child);
+	}
+
+	public boolean hasControlDependent(int parent, int child)
+	{
+		return cdgraph.isSuccessor(parent, child);
 	}
 
 }
