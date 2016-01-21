@@ -1,7 +1,6 @@
 package gfpa.graph.common;
 
 import static org.junit.Assert.*;
-import gfpa.graph.common.LabeledDirectedGraph;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -74,5 +73,22 @@ public class LabeledDirectedGraphTest
 
 	}
 
+	@Test
+	public void test03()
+	{
+		LabeledDirectedGraph<String> a = new LabeledDirectedGraph<String>();
+		a.putEdge(0, 1, "hoge");
+		a.putEdge(1, 2);
+		a.putEdge(2, 3);
+		a.putEdge(1, 3 , "aaa");
+
+		LabeledDirectedGraph<String> b = new LabeledDirectedGraph<String>();
+		b.putEdge(0, 1, "hoge");
+		b.putEdge(1, 2);
+		b.putEdge(2, 3);
+		b.putEdge(1, 3 , "aaa");
+		assertTrue(a.equals(b));
+		assertTrue(b.equals(a));
+	}
 
 }
