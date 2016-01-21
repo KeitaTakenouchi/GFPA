@@ -2,6 +2,7 @@ package gfpa.graph.concrete;
 
 import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.info.Variable;
+import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.set.hash.TIntHashSet;
 
 import java.util.Arrays;
@@ -100,6 +101,13 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 			}
 		}
 
+	}
+
+
+	public void forAllEachEdge(EdgeVisitor visitor)
+	{
+		super.forEachEdge(visitor);
+		cfgraph.forEachEdge(visitor);
 	}
 
 	/**

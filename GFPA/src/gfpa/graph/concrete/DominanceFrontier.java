@@ -41,7 +41,8 @@ public class DominanceFrontier
 
 	public int[] dominanceFrontier(int id)
 	{
-		return dominanceForntiers.get(id).toArray();
+		TIntSet set = dominanceForntiers.get(id);
+		return (set != null)? set.toArray() : new int[0];
 	}
 
 	public int size()

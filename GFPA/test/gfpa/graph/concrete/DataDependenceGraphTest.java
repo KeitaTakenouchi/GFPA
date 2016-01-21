@@ -1,8 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlFlowGraph;
-import gfpa.graph.concrete.DataDependenceGraph;
 import gfpa.graph.info.Variable;
 
 import java.util.Arrays;
@@ -28,67 +26,67 @@ public class DataDependenceGraphTest
 		cfgraph.putEdge(8, 9);
 		cfgraph.putEdge(9, 4);
 
-		DataDependenceGraph dfgraph = new DataDependenceGraph(cfgraph);
-		dfgraph.def(1, new Variable("j"));
-		dfgraph.def(2, new Variable("i"));
-		dfgraph.use(3, new Variable("i"));
-		dfgraph.def(3, new Variable("i"));
-		dfgraph.use(4, new Variable("j"));
-		dfgraph.def(4, new Variable("j"));
-		dfgraph.use(5, new Variable("j"));
-		dfgraph.def(5, new Variable("c"));
-		dfgraph.use(6, new Variable("i"));
-		dfgraph.def(6, new Variable("j"));
-		dfgraph.use(7, new Variable("i"));
-		dfgraph.def(7, new Variable("c"));
-		dfgraph.def(8, new Variable("i"));
-		dfgraph.buildEdges();
+		DataDependenceGraph ddgraph = new DataDependenceGraph(cfgraph);
+		ddgraph.def(1, new Variable("j"));
+		ddgraph.def(2, new Variable("i"));
+		ddgraph.use(3, new Variable("i"));
+		ddgraph.def(3, new Variable("i"));
+		ddgraph.use(4, new Variable("j"));
+		ddgraph.def(4, new Variable("j"));
+		ddgraph.use(5, new Variable("j"));
+		ddgraph.def(5, new Variable("c"));
+		ddgraph.use(6, new Variable("i"));
+		ddgraph.def(6, new Variable("j"));
+		ddgraph.use(7, new Variable("i"));
+		ddgraph.def(7, new Variable("c"));
+		ddgraph.def(8, new Variable("i"));
+		ddgraph.buildEdges();
 
 		{
 			int[] expected = {4};
-			int[] actual = dfgraph.getSuccessors(1);
+			int[] actual = ddgraph.getSuccessors(1);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {3};
-			int[] actual = dfgraph.getSuccessors(2);
+			int[] actual = ddgraph.getSuccessors(2);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {3,6,7};
-			int[] actual = dfgraph.getSuccessors(3);
+			int[] actual = ddgraph.getSuccessors(3);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {4,5};
-			int[] actual = dfgraph.getSuccessors(4);
+			int[] actual = ddgraph.getSuccessors(4);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {};
-			int[] actual = dfgraph.getSuccessors(5);
+			int[] actual = ddgraph.getSuccessors(5);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {4};
-			int[] actual = dfgraph.getSuccessors(6);
+			int[] actual = ddgraph.getSuccessors(6);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {};
-			int[] actual = dfgraph.getSuccessors(7);
+			int[] actual = ddgraph.getSuccessors(7);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
 			int[] expected = {3,6,7};
-			int[] actual = dfgraph.getSuccessors(8);
+			int[] actual = ddgraph.getSuccessors(8);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
