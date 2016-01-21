@@ -10,6 +10,12 @@ public class ControlDependenceGraph extends DirectedGraph
 	public ControlDependenceGraph(ControlFlowGraph cfgraph)
 	{
 		this.rootId = cfgraph.getEntryId();
+
+		//add edge from entry to exit to show nodes.
+		int[] sinks = cfgraph.getSinks();
+		if(sinks.length > 0)
+			cfgraph.putEdge(rootId, sinks[0]);
+
 		this.controlDependence = new DominanceFrontier(cfgraph.getReversedGraph());
 
 		//convert into edges.
@@ -20,6 +26,7 @@ public class ControlDependenceGraph extends DirectedGraph
 				putEdge(j, i);
 			}
 		}
+
 	}
 
 	public int[] controlDependence(int x)

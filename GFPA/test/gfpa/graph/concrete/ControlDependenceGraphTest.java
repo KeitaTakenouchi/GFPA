@@ -1,8 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlDependenceGraph;
-import gfpa.graph.concrete.ControlFlowGraph;
 
 import java.util.Arrays;
 
@@ -18,7 +16,6 @@ public class ControlDependenceGraphTest
 	{
 		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
 		cfgraph.putEdge(0, 1);
-		cfgraph.putEdge(0, 8);
 		cfgraph.putEdge(1, 2);
 		cfgraph.putEdge(1, 3);
 		cfgraph.putEdge(2, 7);
@@ -31,6 +28,7 @@ public class ControlDependenceGraphTest
 		cfgraph.putEdge(7, 8);
 
 		ControlDependenceGraph cdg = new ControlDependenceGraph(cfgraph);
+		cdg.dumpEdges();
 		{
 			int[] expected = {1,7};
 			int[] actual = cdg.getSuccessors(0);
