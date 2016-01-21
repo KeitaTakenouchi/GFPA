@@ -114,7 +114,7 @@ public class DominatorTree extends DirectedGraph
 		return  new HashMap<Integer, TIntHashSet>(original);
 	}
 
-	public int getRootId()
+	public int getEntryId()
 	{
 		return rootId;
 	}

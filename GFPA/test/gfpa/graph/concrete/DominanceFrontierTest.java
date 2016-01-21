@@ -1,8 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlFlowGraph;
-import gfpa.graph.concrete.DominanceFrontier;
 
 import java.util.Arrays;
 
@@ -24,7 +22,6 @@ public class DominanceFrontierTest
 		cfgraph.putEdge(5,6);
 		cfgraph.putEdge(6,2);
 		DominanceFrontier df = new DominanceFrontier(cfgraph);
-
 		{
 			int[] expected = {};
 			int[] actual = df.dominanceFrontier(7);
