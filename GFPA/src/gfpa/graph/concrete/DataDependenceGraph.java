@@ -29,6 +29,11 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		this.cfgraph = cfgraph;
 	}
 
+	public ControlFlowGraph getCFG()
+	{
+		return this.cfgraph;
+	}
+
 	/**
 	 * Build data-flow edges with a fix-point algorithm.
 	 * Bit operations is faster but not implemented.
@@ -102,7 +107,6 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		}
 
 	}
-
 
 	public void forAllEachEdge(EdgeVisitor visitor)
 	{

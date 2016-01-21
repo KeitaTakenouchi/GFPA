@@ -2,7 +2,9 @@ package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
 import gfpa.graph.info.Variable;
+import gfpa.graph.util.VisualizeGraph;
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -90,6 +92,11 @@ public class DataDependenceGraphTest
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
+
+		VisualizeGraph.exportAllDirectedEdgesSideways(ddgraph, new File("c:/tmp/hoge.png"), "png");
+
 	}
+
+
 
 }
