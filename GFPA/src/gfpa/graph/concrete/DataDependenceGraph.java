@@ -136,7 +136,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		definedIds.put(var, ids);
 	}
 
-	public void use(int id, HashSet<Variable> vars)
+	public void use(int id, Set<Variable> vars)
 	{
 		for(Variable var : vars)
 		{

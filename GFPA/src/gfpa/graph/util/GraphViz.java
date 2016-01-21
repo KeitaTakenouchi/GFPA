@@ -71,7 +71,7 @@ public class GraphViz
 	/**
 	 * The dir. where temporary files will be created.
 	 */
-	private static String TEMP_DIR = "C:/tmp";
+	private static String TEMP_DIR = "C:/tmp/graphviz_tmp/";
 
 	/**
 	 * Where is your dot program located? It will be called externally.
