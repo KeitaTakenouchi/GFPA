@@ -2,6 +2,7 @@ package gfpa.graph.concrete;
 
 import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.info.Variable;
+import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.set.hash.TIntHashSet;
 
@@ -42,9 +43,9 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	{
 		HashMap<Integer, TIntHashSet> kill = new HashMap<>();
 		HashMap<Integer, TIntHashSet> reach = new HashMap<>();
-
+		int[] sortedNodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
 		//calculate KILL(n)
-		for (int n : cfgraph.getNodes())
+		for (int n : sortedNodes)
 		{
 			TIntHashSet killSet = new TIntHashSet();
 			if(definedVars.get(n) == null) continue;
@@ -58,7 +59,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		}
 
 		//initialize REACH(n)
-		for(int n : cfgraph.getNodes())
+		for(int n : sortedNodes)
 			reach.put(n, new TIntHashSet());
 
 		//calculate REACH(n)
@@ -66,9 +67,8 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		do
 		{
 			isChanged = false;
-			for(int n : cfgraph.getNodes())
+			for(int n : sortedNodes)
 			{
-//				System.out.println(n);
 				TIntHashSet	newreach = new TIntHashSet();
 				for(int p : cfgraph.getPredecessors(n))
 				{
