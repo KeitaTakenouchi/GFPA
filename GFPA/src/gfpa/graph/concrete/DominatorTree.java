@@ -17,14 +17,14 @@ public class DominatorTree extends DirectedGraph
 	{
 		this.entryId = cfgraph.getEntryId();
 
-		//initialize dominator value.
-		{
+		{//initialize dominator value.
 			TIntHashSet set = new TIntHashSet();
 			set.add(entryId);
 			dominator.put(entryId, set);
 		}
+
 		TIntArrayList notEntryList = new TIntArrayList();
-		notEntryList.addAll(cfgraph.getNodes());
+		notEntryList.addAll(DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId));
 		notEntryList.remove(entryId);
 		for(int i : notEntryList.toArray())
 		{
@@ -32,6 +32,7 @@ public class DominatorTree extends DirectedGraph
 			set.addAll(cfgraph.getNodes());
 			dominator.put(i, set);
 		}
+
 		//calculate dominators with fixed point.
 		HashMap<Integer, TIntHashSet> tmp;
 		do
@@ -39,7 +40,6 @@ public class DominatorTree extends DirectedGraph
 			tmp = new HashMap<>(dominator);
 			for(int n : notEntryList.toArray())
 			{
-				System.out.println(n);
 				TIntHashSet intersection = new TIntHashSet();
 				intersection.addAll(cfgraph.getNodes());
 				for(int p : cfgraph.getPredecessors(n))
