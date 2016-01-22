@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class DominanceFrontier
 {
-	private HashMap<Integer, TIntSet> dominanceForntiers = new HashMap<Integer, TIntSet>();
+	private HashMap<Integer, TIntSet> dominanceFrontiers = new HashMap<Integer, TIntSet>();
 
 	public DominanceFrontier(ControlFlowGraph cfgraph)
 	{
@@ -34,19 +34,19 @@ public class DominanceFrontier
 				}
 			}
 		}
-		dominanceForntiers.put(x, dfrontier);
+		dominanceFrontiers.put(x, dfrontier);
 		return dfrontier;
 	}
 
 	public int[] dominanceFrontier(int id)
 	{
-		TIntSet set = dominanceForntiers.get(id);
+		TIntSet set = dominanceFrontiers.get(id);
 		return (set != null)? set.toArray() : new int[0];
 	}
 
 	public int size()
 	{
-		return dominanceForntiers.size();
+		return dominanceFrontiers.size();
 	}
 
 }
