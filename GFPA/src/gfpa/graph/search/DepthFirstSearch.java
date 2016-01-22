@@ -33,4 +33,21 @@ public class DepthFirstSearch {
 			}
 		}
 	}
+
+	public static int[] DepthFirstOrder(DirectedGraph graph, int startId)
+	{
+		int[] ret =new int[graph.size()];
+		search(graph, startId, new DepthFirstSearchVisitor()
+		{
+			int count = 0;
+			@Override
+			public boolean onVisit(int id)
+			{
+				ret[count] = id;
+				count++;
+				return true;
+			}
+		});
+		return ret;
+	}
 }

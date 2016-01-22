@@ -68,6 +68,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 			isChanged = false;
 			for(int n : cfgraph.getNodes())
 			{
+//				System.out.println(n);
 				TIntHashSet	newreach = new TIntHashSet();
 				for(int p : cfgraph.getPredecessors(n))
 				{

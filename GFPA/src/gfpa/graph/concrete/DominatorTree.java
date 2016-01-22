@@ -39,7 +39,7 @@ public class DominatorTree extends DirectedGraph
 			tmp = new HashMap<>(dominator);
 			for(int n : notEntryList.toArray())
 			{
-//				System.out.println(n);
+				System.out.println(n);
 				TIntHashSet intersection = new TIntHashSet();
 				intersection.addAll(cfgraph.getNodes());
 				for(int p : cfgraph.getPredecessors(n))

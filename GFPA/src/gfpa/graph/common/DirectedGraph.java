@@ -130,7 +130,7 @@ public class DirectedGraph
 	}
 
 	/**
-	 * @return all node ids in asceding order.
+	 * @return all node ids in added order.
 	 */
 	public int[] getNodes()
 	{
