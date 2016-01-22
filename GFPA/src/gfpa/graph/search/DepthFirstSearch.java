@@ -34,7 +34,7 @@ public class DepthFirstSearch {
 		}
 	}
 
-	public static int[] DepthFirstOrder(DirectedGraph graph, int startId)
+	public static int[] depthFirstOrderArray(DirectedGraph graph, int startId)
 	{
 		int[] ret =new int[graph.size()];
 		search(graph, startId, new DepthFirstSearchVisitor()
