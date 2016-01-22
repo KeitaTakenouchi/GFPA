@@ -235,4 +235,22 @@ public class DirectedGraphTest
 		assertTrue(b.equals(a));
 	}
 
+	@Test
+	public void test08()
+	{
+		DirectedGraph a = new DirectedGraph();
+		a.putEdge(0, 1);
+		a.putEdge(1, 2);
+		a.putEdge(2, 3);
+		a.putEdge(1, 3);
+		a.clear();
+
+		assertEquals(0, a.size());
+		assertEquals(0, a.edgeSize());
+
+		a.putEdge(0, 1);
+		assertEquals(2, a.size());
+		assertEquals(1, a.edgeSize());
+	}
+
 }

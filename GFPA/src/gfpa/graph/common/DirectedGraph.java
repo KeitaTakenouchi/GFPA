@@ -2,11 +2,10 @@ package gfpa.graph.common;
 
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
-
-import java.util.HashMap;
 
 /**
  * Directed graph class.
@@ -16,7 +15,7 @@ import java.util.HashMap;
 public class DirectedGraph
 {
 	protected TIntArrayList nodes = new TIntArrayList();
-	protected HashMap<Integer, TIntHashSet> edges = new HashMap<Integer, TIntHashSet>();
+	protected TIntObjectHashMap<TIntHashSet> edges = new TIntObjectHashMap<TIntHashSet>();
 	protected DirectedGraph reverse;
 
 	/**
@@ -45,6 +44,16 @@ public class DirectedGraph
 		if(set == null) set = new TIntHashSet();
 		set.add(to);
 		graph.edges.put(from, set);
+	}
+
+	/**
+	 * clear nodes and edges.
+	 */
+	public void clear()
+	{
+		this.nodes = new TIntArrayList();
+		this.edges = new TIntObjectHashMap<TIntHashSet>();
+		this.reverse = null;
 	}
 
 	/**
@@ -151,7 +160,7 @@ public class DirectedGraph
 	public int edgeSize()
 	{
 		int sum = 0;
-		for(int from :edges.keySet())
+		for(int from :edges.keys())
 		{
 			TIntHashSet set = edges.get(from);
 			sum = sum + set.size();
@@ -161,7 +170,7 @@ public class DirectedGraph
 
 	public void forEachEdge(EdgeVisitor visitor)
 	{
-		for(int from : edges.keySet())
+		for(int from : edges.keys())
 		{
 			for(int to : edges.get(from).toArray())
 			{
@@ -185,7 +194,7 @@ public class DirectedGraph
 	final public void dumpEdges(String title)
 	{
 		System.out.println("----------"+title+"----------");
-		for(int from :edges.keySet())
+		for(int from :edges.keys())
 		{
 			TIntHashSet set = edges.get(from);
 			for(int to : set.toArray())
@@ -216,7 +225,7 @@ public class DirectedGraph
 
 	final protected void importEdgesFrom(DirectedGraph ret)
 	{
-		for(int from : ret.edges.keySet())
+		for(int from : ret.edges.keys())
 		{
 			for(int to : ret.edges.get(from).toArray())
 			{
