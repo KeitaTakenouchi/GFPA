@@ -4,6 +4,7 @@ import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.info.Variable;
 import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.EdgeVisitor;
+import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
 import java.util.Arrays;
@@ -24,10 +25,12 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	private HashMap<Variable, TIntHashSet> definedIds = new HashMap<>();
 	private HashMap<Integer, HashSet<Variable>> usedVars = new HashMap<>();
 	private ControlFlowGraph cfgraph;
+	private	TIntSet reachableNodes;
 
 	public DataDependenceGraph(ControlFlowGraph cfgraph)
 	{
 		this.cfgraph = cfgraph;
+		this.reachableNodes = new TIntHashSet(cfgraph.reachableFrom(cfgraph.getEntryId()));
 	}
 
 	public ControlFlowGraph getCFG()
@@ -44,6 +47,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		HashMap<Integer, TIntHashSet> kill = new HashMap<>();
 		HashMap<Integer, TIntHashSet> reach = new HashMap<>();
 		int[] sortedNodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
+		assert reachableNodes.size() == sortedNodes.length;
 		//calculate KILL(n)
 		for (int n : sortedNodes)
 		{
@@ -72,6 +76,9 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 				TIntHashSet	newreach = new TIntHashSet();
 				for(int p : cfgraph.getPredecessors(n))
 				{
+					//If p is not reachable from the entry node, the definition of p must not be alive.
+					if(reach.get(p) == null) continue;
+
 					TIntHashSet	preach = new TIntHashSet();
 					//REACH(P)
 					preach.addAll(reach.get(p));
@@ -136,6 +143,8 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 
 	public void def(int id, Variable var)
 	{
+		if(!reachableNodes.contains(id)) return;
+
 		HashSet<Variable> vars = definedVars.get(id);
 		if(vars == null) vars = new HashSet<>();
 		vars.add(var);
@@ -155,6 +164,8 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 
 	public void use(int id, Variable var)
 	{
+		if(!reachableNodes.contains(id)) return;
+
 		HashSet<Variable> vars = usedVars.get(id);
 		if(vars == null) vars = new HashSet<>();
 		vars.add(var);
