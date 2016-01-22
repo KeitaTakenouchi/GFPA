@@ -1,6 +1,8 @@
 package gfpa.graph.search;
 
 import gfpa.graph.common.DirectedGraph;
+import gnu.trove.list.TIntList;
+import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
 
@@ -36,18 +38,16 @@ public class DepthFirstSearch {
 
 	public static int[] depthFirstOrderArray(DirectedGraph graph, int startId)
 	{
-		int[] ret =new int[graph.size()];
+		TIntList ret = new TIntArrayList();
 		search(graph, startId, new DepthFirstSearchVisitor()
 		{
-			int count = 0;
 			@Override
 			public boolean onVisit(int id)
 			{
-				ret[count] = id;
-				count++;
+				ret.add(id);
 				return true;
 			}
 		});
-		return ret;
+		return ret.toArray();
 	}
 }
