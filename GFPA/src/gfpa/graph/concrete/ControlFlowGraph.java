@@ -1,6 +1,9 @@
 package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.set.hash.TIntHashSet;
 
 public class ControlFlowGraph extends DirectedGraph
 {
@@ -21,6 +24,30 @@ public class ControlFlowGraph extends DirectedGraph
 	public int getEntryId()
 	{
 		return entryId;
+	}
+
+	public void removeUnreacableNodes()
+	{
+		TIntObjectHashMap<TIntHashSet> newEdges = new TIntObjectHashMap<TIntHashSet>();
+		{
+			TIntArrayList newNodes = new TIntArrayList(reachableFrom(entryId));
+			for(int from : edges.keys())
+			{
+				if(newNodes.contains(from))
+				{
+					TIntHashSet to = edges.get(from);
+					newEdges.put(from, to);
+				}
+			}
+		}
+		clear();
+		for(int from : newEdges.keys())
+		{
+			for(int to : newEdges.get(from).toArray())
+			{
+				putEdge(from, to);
+			}
+		}
 	}
 
 	@Override
@@ -51,7 +78,7 @@ public class ControlFlowGraph extends DirectedGraph
 		int min = arr[0];
 		for(int i = 0 ; i < arr.length ; i++)
 			min = (arr[i] < min)? arr[i] : min;
-		return min;
+			return min;
 	}
 
 }

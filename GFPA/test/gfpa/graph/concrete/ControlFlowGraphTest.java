@@ -147,4 +147,37 @@ public class ControlFlowGraphTest {
 		assertTrue(b.equals(a));
 	}
 
+	@Test
+	public void test06()
+	{
+		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
+		cfgraph.putEdge(0, 1);
+		cfgraph.putEdge(1, 3);
+		cfgraph.putEdge(3, 5);
+		cfgraph.putEdge(8, 4);
+		cfgraph.putEdge(4, 5);
+		cfgraph.removeUnreacableNodes();
+		{
+			int[] expected = {3};
+			int[] actual = cfgraph.getPredecessors(5);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {1};
+			int[] actual = cfgraph.getSuccessors(0);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int expected = 4;
+			int actual = cfgraph.size();
+			assertEquals(expected, actual);
+		}
+		{
+			int expected = 3;
+			int actual = cfgraph.edgeSize();
+			assertEquals(expected, actual);
+		}
+	}
 }
