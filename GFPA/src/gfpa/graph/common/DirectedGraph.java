@@ -134,8 +134,7 @@ public class DirectedGraph
 	 */
 	public int[] getNodes()
 	{
-		int[] array = nodes.toArray();
-		return array;
+		return nodes.toArray();
 	}
 
 	/**
