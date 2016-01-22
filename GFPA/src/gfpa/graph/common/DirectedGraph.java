@@ -1,11 +1,11 @@
 package gfpa.graph.common;
 
 import gfpa.graph.search.EdgeVisitor;
+import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class DirectedGraph
 {
-	protected TIntHashSet nodes = new TIntHashSet();
+	protected TIntArrayList nodes = new TIntArrayList();
 	protected HashMap<Integer, TIntHashSet> edges = new HashMap<Integer, TIntHashSet>();
 	protected DirectedGraph reverse;
 
@@ -37,8 +37,10 @@ public class DirectedGraph
 
 	private void addEdge(int from, int to, DirectedGraph graph)
 	{
-		graph.nodes.add(from);
-		graph.nodes.add(to);
+		if(!graph.nodes.contains(from))
+			graph.nodes.add(from);
+		if(!graph.nodes.contains(to))
+			graph.nodes.add(to);
 		TIntHashSet set = graph.edges.get(from);
 		if(set == null) set = new TIntHashSet();
 		set.add(to);
@@ -133,7 +135,7 @@ public class DirectedGraph
 	public int[] getNodes()
 	{
 		int[] array = nodes.toArray();
-		Arrays.sort(array);
+//		Arrays.sort(array);
 		return array;
 	}
 
