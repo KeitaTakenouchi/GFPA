@@ -131,9 +131,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	public void def(int id, Set<Variable> vars)
 	{
 		for(Variable var : vars)
-		{
 			def(id, var);
-		}
 	}
 
 	public void def(int id, Variable var)
@@ -152,9 +150,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	public void use(int id, Set<Variable> vars)
 	{
 		for(Variable var : vars)
-		{
 			use(id, var);
-		}
 	}
 
 	public void use(int id, Variable var)
