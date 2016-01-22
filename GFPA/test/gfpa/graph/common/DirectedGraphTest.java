@@ -67,6 +67,18 @@ public class DirectedGraphTest
 			Arrays.sort(actual);
 			assertArrayEquals(expected,actual);
 		}
+		{
+			int[] expected = {1,3,5};
+			int[] actual = graph.getConnected(2);
+			Arrays.sort(actual);
+			assertArrayEquals(expected,actual);
+		}
+		{
+			int[] expected = {1,3};
+			int[] actual = graph.getConnected(0);
+			Arrays.sort(actual);
+			assertArrayEquals(expected,actual);
+		}
 	}
 
 	@Test

@@ -58,6 +58,14 @@ public class DirectedGraph
 		return (set != null)? set.contains(child) : false;
 	}
 
+	public int[] getConnected(int i)
+	{
+		TIntHashSet ret = new TIntHashSet();
+		ret.addAll(getPredecessors(i));
+		ret.addAll(getSuccessors(i));
+		return (ret != null)? ret.toArray() : new int[0];
+	}
+
 	public int[] getSuccessors(int i)
 	{
 		TIntHashSet set = edges.get(i);
