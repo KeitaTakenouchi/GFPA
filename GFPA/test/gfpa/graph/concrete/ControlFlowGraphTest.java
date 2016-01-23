@@ -29,7 +29,7 @@ public class ControlFlowGraphTest {
 			assertEquals(expected, actual);
 		}
 		{
-			int expected = 7;
+			int expected = -1;
 			int actual = cfgraph.getReversedGraph().getEntryId();
 			assertEquals(expected, actual);
 		}
@@ -106,9 +106,19 @@ public class ControlFlowGraphTest {
 		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
 		cfgraph.putEdge(0, 1);
 		{
-			int expected = 1;
+			int expected = -1;
 			int actual = cfgraph.getReversedGraph().getEntryId();
 			assertEquals(expected, actual);
+		}
+		{
+			int[] expected = {0};
+			int[] actual = cfgraph.getReversedGraph().getSuccessors(1);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {-1};
+			int[] actual = cfgraph.getReversedGraph().getPredecessors(1);
+			assertArrayEquals(expected, actual);
 		}
 		cfgraph.putEdge(0, 2);
 		{
@@ -124,7 +134,7 @@ public class ControlFlowGraphTest {
 		}
 		cfgraph.putEdge(2, 3);
 		{
-			int expected = 3;
+			int expected = -1;
 			int actual = cfgraph.getReversedGraph().getEntryId();
 			assertEquals(expected, actual);
 		}
@@ -203,13 +213,13 @@ public class ControlFlowGraphTest {
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {reverse.getEntryId()};
+			int[] expected = {-1};
 			int[] actual = revrev.getSuccessors(2);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {reverse.getEntryId()};
+			int[] expected = {-1};
 			int[] actual = revrev.getSuccessors(3);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
