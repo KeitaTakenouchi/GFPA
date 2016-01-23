@@ -216,13 +216,6 @@ public class DirectedGraph
 		reverse = new DirectedGraph();
 	}
 
-	final protected void copyReverseGraphTo(DirectedGraph graph)
-	{
-		graph.nodes.addAll(reverse.nodes);
-		graph.edges.putAll(reverse.edges);
-		graph.reverse = reverse.reverse;
-	}
-
 	final protected void importEdgesFrom(DirectedGraph ret)
 	{
 		for(int from : ret.edges.keys())
