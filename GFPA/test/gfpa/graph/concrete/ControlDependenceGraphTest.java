@@ -1,9 +1,7 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.util.VisualizeGraph;
 
-import java.io.File;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -12,30 +10,6 @@ import org.junit.Test;
 
 public class ControlDependenceGraphTest
 {
-
-	@Test
-	public void test()
-	{
-		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
-		cfgraph.putEdge(0, 1);
-		cfgraph.putEdge(1, 2);
-		cfgraph.putEdge(1, 3);
-		cfgraph.putEdge(2, 7);
-		cfgraph.putEdge(3, 4);
-		cfgraph.putEdge(3, 5);
-		cfgraph.putEdge(4, 6);
-		cfgraph.putEdge(5, 6);
-		cfgraph.putEdge(6, 7);
-		cfgraph.putEdge(7, 8);
-		cfgraph.putEdge(2, 10);
-		cfgraph.putEdge(5, 12);
-
-		VisualizeGraph.exportDirectedEdges(cfgraph, new File("c:/tmp/graphs/cf.png"), "png");
-		ControlDependenceGraph cdg = new ControlDependenceGraph(cfgraph);
-		cdg.dumpEdges();
-		VisualizeGraph.exportDirectedEdges(cdg, new File("c:/tmp/graphs/cdg.png"), "png");
-	}
-
 	@Test
 	public void test01()
 	{
