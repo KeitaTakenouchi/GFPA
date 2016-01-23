@@ -180,4 +180,39 @@ public class ControlFlowGraphTest {
 			assertEquals(expected, actual);
 		}
 	}
+
+	@Test
+	public void test07()
+	{
+		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
+		cfgraph.putEdge(0, 1);
+		cfgraph.putEdge(1, 2);
+		cfgraph.putEdge(1, 3);
+		ControlFlowGraph reverse = cfgraph.getReversedGraph();
+		ControlFlowGraph revrev = reverse.getReversedGraph();
+		{
+			int[] expected = {1};
+			int[] actual = revrev.getSuccessors(0);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,3};
+			int[] actual = revrev.getSuccessors(1);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {reverse.getEntryId()};
+			int[] actual = revrev.getSuccessors(2);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {reverse.getEntryId()};
+			int[] actual = revrev.getSuccessors(3);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+	}
 }

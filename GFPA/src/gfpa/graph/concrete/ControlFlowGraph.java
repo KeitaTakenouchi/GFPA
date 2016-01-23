@@ -1,6 +1,7 @@
 package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
+import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.TIntHashSet;
@@ -53,24 +54,39 @@ public class ControlFlowGraph extends DirectedGraph
 	@Override
 	public ControlFlowGraph getReversedGraph()
 	{
-		ControlFlowGraph reverse = null;
 		int[] sinks = getSinks();
 
 		if(sinks.length == 1)
 		{
-			reverse = new ControlFlowGraph(sinks[0]);
+			ControlFlowGraph reverse = new ControlFlowGraph(sinks[0]);
+			forEachEdge(new EdgeVisitor()
+			{
+				@Override
+				public boolean perform(int from, int to)
+				{
+					reverse.putEdge(to, from);
+					return true;
+				}
+			});
+			return reverse;
 		}
 		else
 		{
 			int tmpExit = min(nodes.toArray()) -1;
-			reverse = new ControlFlowGraph(tmpExit);
+			ControlFlowGraph reverse = new ControlFlowGraph(tmpExit);
 			for(int i : sinks)
-			{
 				reverse.putEdge(tmpExit, i);
-			}
+			forEachEdge(new EdgeVisitor()
+			{
+				@Override
+				public boolean perform(int from, int to)
+				{
+					reverse.putEdge(to, from);
+					return true;
+				}
+			});
+			return reverse;
 		}
-		copyReverseGraphTo(reverse);
-		return reverse;
 	}
 
 	private int min(int[] arr)
