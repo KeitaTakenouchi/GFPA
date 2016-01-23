@@ -1,9 +1,6 @@
 package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
-import gfpa.graph.util.VisualizeGraph;
-
-import java.io.File;
 
 public class ControlDependenceGraph extends DirectedGraph
 {
@@ -16,7 +13,6 @@ public class ControlDependenceGraph extends DirectedGraph
 
 		ControlFlowGraph reversedGraph = cfgraph.getReversedGraph();
 		reversedGraph.putEdge(reversedGraph.getEntryId(), rootId);
-		VisualizeGraph.exportDirectedEdges(reversedGraph, new File("c:/tmp/graphs/rev.png"), "png");
 
 		this.controlDependence = new DominanceFrontier(reversedGraph);
 		//convert into edges.
