@@ -20,16 +20,19 @@ public class DominanceFrontierTest
 		cfgraph.putEdge(3,5);
 		cfgraph.putEdge(4,6);
 		cfgraph.putEdge(5,6);
-		cfgraph.putEdge(6,2);
+		cfgraph.putEdge(6,8);
+		cfgraph.putEdge(7,8);
+		cfgraph.putEdge(1,8);
+
 		DominanceFrontier df = new DominanceFrontier(cfgraph);
 		{
-			int[] expected = {};
+			int[] expected = {8};
 			int[] actual = df.dominanceFrontier(7);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {2};
+			int[] expected = {8};
 			int[] actual = df.dominanceFrontier(6);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
@@ -47,13 +50,13 @@ public class DominanceFrontierTest
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {2};
+			int[] expected = {8};
 			int[] actual = df.dominanceFrontier(3);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {2};
+			int[] expected = {8};
 			int[] actual = df.dominanceFrontier(2);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
