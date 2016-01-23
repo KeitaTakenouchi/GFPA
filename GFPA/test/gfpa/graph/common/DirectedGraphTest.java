@@ -253,4 +253,18 @@ public class DirectedGraphTest
 		assertEquals(1, a.edgeSize());
 	}
 
+
+	@Test
+	public void test09()
+	{
+		DirectedGraph a = new DirectedGraph();
+		a.putEdge(0, 1);
+		a.putEdge(1, 2);
+		a.putEdge(2, 3);
+		a.putEdge(1, 3);
+
+		assertTrue(a.isLeaf(3));
+		assertFalse(a.isLeaf(2));
+	}
+
 }

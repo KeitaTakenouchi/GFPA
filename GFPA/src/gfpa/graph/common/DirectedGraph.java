@@ -67,6 +67,11 @@ public class DirectedGraph
 		return (set != null)? set.contains(child) : false;
 	}
 
+	public boolean isLeaf(int i)
+	{
+		return getSuccessors(i).length == 0;
+	}
+
 	public int[] getConnected(int i)
 	{
 		TIntHashSet ret = new TIntHashSet();
