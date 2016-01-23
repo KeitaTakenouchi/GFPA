@@ -1,8 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.concrete.ControlFlowGraph;
-import gfpa.graph.concrete.DominatorTree;
 
 import java.util.Arrays;
 
@@ -28,7 +26,7 @@ public class DominatorTreeTest
 		cfgraph.putEdge(6, 7);
 
 		DominatorTree domtree = new DominatorTree(cfgraph);
-		domtree.dumpEdges();
+//		domtree.dumpEdges();
 		{
 			int[] expected = {0,1,3,6};
 			int[] actual = domtree.dominator(6);
@@ -72,7 +70,7 @@ public class DominatorTreeTest
 		cfgraph.putEdge(5, 6);
 
 		DominatorTree domtree = new DominatorTree(cfgraph);
-		domtree.dumpEdges();
+//		domtree.dumpEdges();
 	}
 
 }
