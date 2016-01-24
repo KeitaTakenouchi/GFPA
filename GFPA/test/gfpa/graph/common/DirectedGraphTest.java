@@ -280,25 +280,20 @@ public class DirectedGraphTest
 		g.putEdge(13,14);
 		g.putEdge(20,21);
 		g.putEdge(21,22);
-		DirectedGraph[] sorted = g.dividedGraphs();
-		{
-			int[] expected = {0,1,2,3};
-			int[] actual = sorted[0].getNodes();
-			Arrays.sort(actual);
-			assertArrayEquals(expected, actual);
-		}
-		{
-			int[] expected = {10,11,12,13,14};
-			int[] actual = sorted[1].getNodes();
-			Arrays.sort(actual);
-			assertArrayEquals(expected, actual);
-		}
-		{
-			int[] expected = {20,21,22};
-			int[] actual = sorted[2].getNodes();
-			Arrays.sort(actual);
-			assertArrayEquals(expected, actual);
-		}
+		g.putEdge(30,31);
+		g.putEdge(32,31);
+		DirectedGraph[] graphs = g.dividedGraphs();
 
+		int nodes = 0;
+		for(int i = 0 ; i < graphs.length ; i++)
+			nodes = nodes + graphs[i].size();
+
+		int edges = 0;
+		for(int i = 0 ; i < graphs.length ; i++)
+			edges = edges + graphs[i].edgeSize();
+
+		assertEquals(g.size(), nodes);
+		assertEquals(g.edgeSize(), edges);
+		assertEquals(4, graphs.length);
 	}
 }

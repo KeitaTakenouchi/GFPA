@@ -2,10 +2,14 @@ package gfpa.graph.common;
 
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
+import gnu.trove.stack.TIntStack;
 import gnu.trove.stack.array.TIntArrayStack;
+
+import java.util.ArrayList;
 
 /**
  * Directed graph class.
@@ -187,8 +191,35 @@ public class DirectedGraph
 
 	public DirectedGraph[] dividedGraphs()
 	{
+		ArrayList<DirectedGraph> graphList = new ArrayList<DirectedGraph>();
+		TIntLinkedList remaining = new TIntLinkedList();
+		remaining.addAll(getNodes());
 
-		return null;
+		while(!remaining.isEmpty()){
+			TIntStack worklist = new TIntArrayStack();
+			int start = remaining.removeAt(0);
+			worklist.push(start);
+			remaining.remove(start);
+			DirectedGraph graph = new DirectedGraph();
+
+			while(worklist.size() > 0)
+			{
+				int from = worklist.pop();
+				int[] connected = getConnected(from);
+				for(int to : connected)
+				{
+					if(isSuccessor(from, to))	graph.putEdge(from, to);
+					if(remaining.contains(to)){
+						worklist.push(to);
+						remaining.remove(to);
+					}
+				}
+			}
+			graphList.add(graph);
+		}
+		DirectedGraph[] ret = new DirectedGraph[graphList.size()];
+		graphList.toArray(ret);
+		return ret;
 	}
 
 	/**
