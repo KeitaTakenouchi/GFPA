@@ -267,4 +267,38 @@ public class DirectedGraphTest
 		assertFalse(a.isLeaf(2));
 	}
 
+	@Test
+	public void test10()
+	{
+		DirectedGraph g = new DirectedGraph();
+		g.putEdge(0, 1);
+		g.putEdge(1, 2);
+		g.putEdge(1, 3);
+		g.putEdge(10,11);
+		g.putEdge(10,12);
+		g.putEdge(11,13);
+		g.putEdge(13,14);
+		g.putEdge(20,21);
+		g.putEdge(21,22);
+		DirectedGraph[] sorted = g.dividedGraphs();
+		{
+			int[] expected = {0,1,2,3};
+			int[] actual = sorted[0].getNodes();
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {10,11,12,13,14};
+			int[] actual = sorted[1].getNodes();
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {20,21,22};
+			int[] actual = sorted[2].getNodes();
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+
+	}
 }
