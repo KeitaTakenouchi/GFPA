@@ -1,16 +1,11 @@
 package gfpa.graph.common;
 
-import gfpa.graph.search.DepthFirstSearch;
-import gfpa.graph.search.DepthFirstSearchVisitor;
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;
-
-import java.util.ArrayList;
 
 /**
  * Directed graph class.
@@ -192,38 +187,8 @@ public class DirectedGraph
 
 	public DirectedGraph[] dividedGraphs()
 	{
-		ArrayList<DirectedGraph> graphList = new ArrayList<DirectedGraph>();
-		TIntLinkedList remaining = new TIntLinkedList();
-		remaining.addAll(getNodes());
 
-		while(!remaining.isEmpty())
-		{
-			int start = remaining.removeAt(0);
-			DirectedGraph graph = new DirectedGraph();
-
-			DepthFirstSearch.search(this, start, new DepthFirstSearchVisitor()
-			{
-				int previous;
-				@Override
-				public boolean onVisit(int id)
-				{
-					if(id == start)
-					{
-						previous = id;
-						return true;
-					}
-					remaining.remove(id);
-					graph.putEdge(previous, id);
-					previous = id;
-					return true;
-				}
-			});
-			graphList.add(graph);
-		}
-
-		DirectedGraph[] ret = new DirectedGraph[graphList.size()];
-		graphList.toArray(ret);
-		return ret;
+		return null;
 	}
 
 	/**
