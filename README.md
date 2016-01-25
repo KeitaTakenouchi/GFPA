@@ -1,5 +1,5 @@
 # Graphs for Program Analysis.
-This program includes these graph.
+This program includes these graphs.
  * Control Flow Graph
  * Control Dependence Graph
  * Data Dependence Graph
