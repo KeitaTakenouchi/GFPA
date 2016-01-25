@@ -1,5 +1,5 @@
 # Graphs for Program Analysis.
-This program is including these graphs.
+This program includes these graph.
  * Control Flow Graph
  * Control Dependence Graph
  * Data Dependence Graph
@@ -7,4 +7,4 @@ This program is including these graphs.
  * Dominator Tree
  * Program Dependence Graph
 
-Nodes of all graphs are represented as integer IDs to better usability.
+Nodes of all graphs are represented as integer IDs to better flexibility.
