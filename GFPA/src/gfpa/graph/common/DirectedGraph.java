@@ -164,6 +164,15 @@ public class DirectedGraph
 	}
 
 	/**
+	 * @param id is node id.
+	 * @return true if the ndoe id is contained.
+	 */
+	public boolean contains(int id)
+	{
+		return nodes.contains(id);
+	}
+
+	/**
 	 * @return edge size
 	 */
 	public int edgeSize()
