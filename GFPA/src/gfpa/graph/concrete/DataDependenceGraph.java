@@ -172,16 +172,4 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		usedVars.put(id, vars);
 	}
 
-	@Override
-	public void putEdge(int from, int to, Variable label)
-	{
-		throw new AssertionError();
-	}
-
-	@Override
-	public void putEdge(int from, int to)
-	{
-		throw new AssertionError();
-	}
-
 }
