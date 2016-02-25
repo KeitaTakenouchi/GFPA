@@ -20,8 +20,6 @@ public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 		this(datafg, new ControlDependenceGraph(cfg));
 	}
 
-	public ProgramDependenceGraph()	{}
-
 	public int[] backwardSlice(int i)
 	{
 		return reachableTo(i);
