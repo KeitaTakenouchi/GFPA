@@ -56,37 +56,20 @@ public class ControlFlowGraph extends DirectedGraph
 	{
 		int[] sinks = getSinks();
 
-//		if(sinks.length == 1)
-//		{
-//			ControlFlowGraph reverse = new ControlFlowGraph(sinks[0]);
-//			forEachEdge(new EdgeVisitor()
-//			{
-//				@Override
-//				public boolean perform(int from, int to)
-//				{
-//					reverse.putEdge(to, from);
-//					return true;
-//				}
-//			});
-//			return reverse;
-//		}
-//		else
-//		{
-			int tmpExit = min(nodes.toArray()) -1;
-			ControlFlowGraph reverse = new ControlFlowGraph(tmpExit);
-			for(int i : sinks)
-				reverse.putEdge(tmpExit, i);
-			forEachEdge(new EdgeVisitor()
+		int tmpExit = min(nodes.toArray()) -1;
+		ControlFlowGraph reverse = new ControlFlowGraph(tmpExit);
+		for(int i : sinks)
+			reverse.putEdge(tmpExit, i);
+		forEachEdge(new EdgeVisitor()
+		{
+			@Override
+			public boolean perform(int from, int to)
 			{
-				@Override
-				public boolean perform(int from, int to)
-				{
-					reverse.putEdge(to, from);
-					return true;
-				}
-			});
-			return reverse;
-//		}
+				reverse.putEdge(to, from);
+				return true;
+			}
+		});
+		return reverse;
 	}
 
 	private int min(int[] arr)
