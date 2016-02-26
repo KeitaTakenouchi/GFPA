@@ -2,7 +2,6 @@ package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
 import gfpa.graph.info.Variable;
-import gnu.trove.set.hash.TIntHashSet;
 
 import java.util.Arrays;
 
@@ -86,15 +85,24 @@ public class ProgramDependeGraphTest
 //		pdgraph.dumpEdges("Program Dependency Graph");
 	}
 
-	private void dumpCode(String[] source, TIntHashSet set)
+	@Test
+	public void test02()
 	{
-		System.out.println("-----------------------------");
-		for(int i = 0 ; i < source.length ; i++)
-		{
-			if(set.contains(i))
-				System.out.println(i+":"+source[i]);
-		}
-		System.out.println("-----------------------------");
+		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph();
+		pdgraph.putEdge(0, 1, new Variable("a"));
+		pdgraph.putEdge(0, 2);
+		pdgraph.putEdge(1, 3);
+		pdgraph.putEdge(2, 3);
+		pdgraph.putEdge(2, 3, new Variable("b"));
+
+		assertTrue(pdgraph.hasDataDependent(0, 1));
+		assertTrue(pdgraph.hasDataDependent(2, 3));
+		assertTrue(pdgraph.hasControlDependent(0, 2));
+		assertTrue(pdgraph.hasControlDependent(1, 3));
+		assertTrue(pdgraph.hasControlDependent(2, 3));
+
+		assertFalse(pdgraph.hasControlDependent(89, 3));
+		assertFalse(pdgraph.hasControlDependent(0, 0));
 	}
 
 }
