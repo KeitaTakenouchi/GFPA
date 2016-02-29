@@ -110,14 +110,14 @@ public class VisualizeGraph
 		});
 	}
 
-	private static void addAllEdgesWithLabel(DataDependenceGraph ｄｄgraph, GraphViz gv)
+	private static void addAllEdgesWithLabel(DataDependenceGraph ddgraph, GraphViz gv)
 	{
-		ｄｄgraph.forAllEachEdge(new EdgeVisitor()
+		ddgraph.forAllEachEdge(new EdgeVisitor()
 		{
 			@Override
 			public boolean perform(int from, int to)
 			{
-				HashSet<Variable> labels = ｄｄgraph.getLabels(from, to);
+				HashSet<Variable> labels = ddgraph.getLabels(from, to);
 				if(labels == null)
 				{
 					gv.addln(from + " -> " + to +" [color = red];");
@@ -128,7 +128,7 @@ public class VisualizeGraph
 					for(Variable v : labels)
 						bf.append(v.toString()+",");
 					bf.deleteCharAt(bf.length()-1);
-					if(ｄｄgraph.getCFG().isSuccessor(from, to))
+					if(ddgraph.getCFG().isSuccessor(from, to))
 						gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = blue];");
 					else
 						gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = darkgreen];");
