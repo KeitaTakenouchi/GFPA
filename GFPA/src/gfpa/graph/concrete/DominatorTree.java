@@ -11,14 +11,14 @@ import java.util.HashMap;
 public class DominatorTree extends DirectedGraph
 {
 	private int entryId;
-	private HashMap<Integer, TIntHashSet> dominator = new HashMap<Integer, TIntHashSet>();
+	private HashMap<Integer, TIntArrayList> dominator = new HashMap<Integer, TIntArrayList>();
 
 	public DominatorTree(ControlFlowGraph cfgraph)
 	{
 		this.entryId = cfgraph.getEntryId();
 
 		{//initialize dominator value.
-			TIntHashSet set = new TIntHashSet();
+			TIntArrayList set = new TIntArrayList();
 			set.add(entryId);
 			dominator.put(entryId, set);
 		}
@@ -28,23 +28,24 @@ public class DominatorTree extends DirectedGraph
 		notEntryList.remove(entryId);
 		for(int i : notEntryList.toArray())
 		{
-			TIntHashSet set = new TIntHashSet();
+			TIntArrayList set = new TIntArrayList();
 			set.addAll(cfgraph.getNodes());
 			dominator.put(i, set);
 		}
 
 		//calculate dominators with fixed point.
-		HashMap<Integer, TIntHashSet> tmp;
+		HashMap<Integer, TIntArrayList> tmp;
 		do
 		{
 			tmp = new HashMap<>(dominator);
 			for(int n : notEntryList.toArray())
 			{
-				TIntHashSet intersection = new TIntHashSet();
+				TIntArrayList intersection = new TIntArrayList();
 				intersection.addAll(cfgraph.getNodes());
 				for(int p : cfgraph.getPredecessors(n))
 					intersection.retainAll(dominator.get(p));
-				intersection.add(n);
+				if(!intersection.contains(n))
+					intersection.add(n);
 				dominator.put(n, intersection);
 			}
 		} while (!tmp.equals(dominator));
