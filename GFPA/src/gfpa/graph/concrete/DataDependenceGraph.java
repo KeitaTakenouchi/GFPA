@@ -87,7 +87,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 			def[i].set(i);
 		}
 
-		//calculate REACH(n)
+		//calculate REACH(n) with the fixed point algorithm.
 		boolean isChanged;
 		do
 		{
