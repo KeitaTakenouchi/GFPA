@@ -55,22 +55,59 @@ public class DominatorTreeTest
 		}
 	}
 
-	/**
-	 * Speed test.
-	 */
 	@Test
 	public void test02()
 	{
-		ControlFlowGraph cfgraph = new ControlFlowGraph(1);
-		cfgraph.putEdge(1 ,2);
-		cfgraph.putEdge(2, 3);
-		cfgraph.putEdge(2, 4);
-		cfgraph.putEdge(3, 5);
-		cfgraph.putEdge(4, 5);
-		cfgraph.putEdge(5, 6);
+		ControlFlowGraph cfgraph = new ControlFlowGraph(2);
+		cfgraph.putEdge(2 ,42);
+		cfgraph.putEdge(2, 20);
+		cfgraph.putEdge(42, 81);
+		cfgraph.putEdge(20, 81);
+		cfgraph.putEdge(20, 48);
+		cfgraph.putEdge(81, 19);
+		cfgraph.putEdge(19, -1);
+		cfgraph.putEdge(19, 23);
+		cfgraph.putEdge(48, 23);
+		cfgraph.putEdge(23, -2);
 
 		DominatorTree domtree = new DominatorTree(cfgraph);
 //		domtree.dumpEdges();
+		{
+			int[] expected = {2};
+			int[] actual = domtree.dominator(2);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,42};
+			int[] actual = domtree.dominator(42);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,81};
+			int[] actual = domtree.dominator(81);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,19,81};
+			int[] actual = domtree.dominator(19);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,20,48};
+			int[] actual = domtree.dominator(48);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2,23};
+			int[] actual = domtree.dominator(23);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
 	}
 
 }

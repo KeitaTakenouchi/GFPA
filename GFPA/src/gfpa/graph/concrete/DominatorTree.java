@@ -3,66 +3,73 @@ package gfpa.graph.concrete;
 import gfpa.graph.common.DirectedGraph;
 import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.DepthFirstSearchVisitor;
-import gnu.trove.list.array.TIntArrayList;
-import gnu.trove.set.hash.TIntHashSet;
+import gnu.trove.map.hash.TIntIntHashMap;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.BitSet;
 
 public class DominatorTree extends DirectedGraph
 {
 	private int entryId;
-	private HashMap<Integer, TIntArrayList> dominator = new HashMap<Integer, TIntArrayList>();
+	private int size;
+	private int[] nodes;
+	//	private HashMap<Integer, TIntArrayList> dominator = new HashMap<Integer, TIntArrayList>();
+	private BitSet[] dominator;
+	private TIntIntHashMap idIndexMap = new TIntIntHashMap();
 
 	public DominatorTree(ControlFlowGraph cfgraph)
 	{
 		this.entryId = cfgraph.getEntryId();
-
-		{//initialize dominator value.
-			TIntArrayList set = new TIntArrayList();
-			set.add(entryId);
-			dominator.put(entryId, set);
-		}
-
-		TIntArrayList notEntryList = new TIntArrayList();
-		notEntryList.addAll(DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId));
-		notEntryList.remove(entryId);
-		for(int i : notEntryList.toArray())
+		this.size = cfgraph.size();
+		this.dominator = new BitSet[size];
+		this.nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId);
+		//initialize dominator value.
+		for(int i = 0  ; i < nodes.length ; i++ )
 		{
-			TIntArrayList set = new TIntArrayList();
-			set.addAll(cfgraph.getNodes());
-			dominator.put(i, set);
+			BitSet bits = new BitSet(size);
+			if(nodes[i] != entryId)
+				bits.set(0, bits.size());
+			else
+				bits.set(i);
+			dominator[i] = bits;
+			idIndexMap.put(nodes[i], i);
 		}
 
 		//calculate dominators with fixed point.
-		HashMap<Integer, TIntArrayList> tmp;
+		BitSet[] tmp;
 		do
 		{
-			tmp = new HashMap<>(dominator);
-			for(int n : notEntryList.toArray())
+			tmp = new BitSet[size];
+			for(int i = 0 ; i < size ; i++)
+				tmp[i] = (BitSet) dominator[i].clone();
+			//calculate dom(n)
+			for(int i = 0 ; i < nodes.length; i++)
 			{
-				TIntArrayList intersection = new TIntArrayList();
-				intersection.addAll(cfgraph.getNodes());
+				int n = nodes[i];
+				if(n == entryId) continue;
+				BitSet intersection = new BitSet(size);
+				intersection.set(0,intersection.size());
 				for(int p : cfgraph.getPredecessors(n))
-					intersection.retainAll(dominator.get(p));
-				if(!intersection.contains(n))
-					intersection.add(n);
-				dominator.put(n, intersection);
+					intersection.and(dominator[idIndexMap.get(p)]);
+				intersection.set(i);
+				dominator[i] = intersection;
 			}
-		} while (!tmp.equals(dominator));
-//		dump(dominator);
+		} while (!Arrays.equals(tmp, dominator));
+		//		dump(dominator);
 
 		//build tree edges.
 		//DFS is enough because each node has a single parent node.
 		ControlFlowGraph reversedGraph = cfgraph.getReversedGraph();
-		for(int to : dominator.keySet())
+		for(int to : nodes)
 		{
+			int i = idIndexMap.get(to);
 			DepthFirstSearch.search(reversedGraph, to, new DepthFirstSearchVisitor()
 			{
 				@Override
 				public boolean onVisit(int from)
 				{
 					if(to == from) return true;
-					if(dominator.get(to).contains(from))
+					if(dominator[i].get(idIndexMap.get(from)))
 					{
 						putEdge(from, to);
 						return false;
@@ -73,11 +80,13 @@ public class DominatorTree extends DirectedGraph
 		}
 	}
 
-	private void dump(HashMap<Integer, TIntHashSet> dominator)
+	private void dump(BitSet[] dominator)
 	{
 		System.out.println();
-		for( int i : dominator.keySet())
-			System.out.println("dom("+i +")=" + dominator.get(i));
+		for(int i = 0 ; i < dominator.length ; i++)
+		{
+			System.out.println("dom("+i +")="+ dominator[i]);
+		}
 	}
 
 	public int getEntryId()
@@ -87,12 +96,12 @@ public class DominatorTree extends DirectedGraph
 
 	/**
 	 * d dominates n if every path from the entry node to n must go through d.
-	 * @param i specifies node ID.
+	 * @param n specifies node ID.
 	 * @return node IDs which dominate i, that is dom(i).
 	 */
-	public int[] dominator(int i)
+	public int[] dominator(int n)
 	{
-		return dominator.get(i).toArray();
+		return reachableTo(n);
 	}
 
 	/**
