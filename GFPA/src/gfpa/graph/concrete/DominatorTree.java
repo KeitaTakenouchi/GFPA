@@ -12,7 +12,6 @@ public class DominatorTree extends DirectedGraph
 {
 	private int entryId;
 	private int size;
-	private int[] nodes;
 	//	private HashMap<Integer, TIntArrayList> dominator = new HashMap<Integer, TIntArrayList>();
 	private BitSet[] dominator;
 	private TIntIntHashMap idIndexMap = new TIntIntHashMap();
@@ -22,7 +21,7 @@ public class DominatorTree extends DirectedGraph
 		this.entryId = cfgraph.getEntryId();
 		this.size = cfgraph.size();
 		this.dominator = new BitSet[size];
-		this.nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId);
+		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId);
 		//initialize dominator value.
 		for(int i = 0  ; i < nodes.length ; i++ )
 		{
