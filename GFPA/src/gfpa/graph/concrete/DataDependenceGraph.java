@@ -46,10 +46,10 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	{
 		HashMap<Integer, TIntHashSet> kill = new HashMap<>();
 		HashMap<Integer, TIntHashSet> reach = new HashMap<>();
-		int[] sortedNodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
-		assert reachableNodes.size() == sortedNodes.length;
+		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
+		assert reachableNodes.size() == nodes.length;
 		//calculate KILL(n)
-		for (int n : sortedNodes)
+		for (int n : nodes)
 		{
 			TIntHashSet killSet = new TIntHashSet();
 			if(definedVars.get(n) == null) continue;
@@ -63,15 +63,14 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 		}
 
 		//initialize REACH(n)
-		for(int n : sortedNodes)
+		for(int n : nodes)
 			reach.put(n, new TIntHashSet());
-
 		//calculate REACH(n)
 		boolean isChanged;
 		do
 		{
 			isChanged = false;
-			for(int n : sortedNodes)
+			for(int n : nodes)
 			{
 				TIntHashSet	newreach = new TIntHashSet();
 				for(int p : cfgraph.getPredecessors(n))
@@ -100,7 +99,6 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 			}
 		} while (isChanged);
 		//		dumpReach(reach);
-
 		//build edges
 		for(int usedId : usedVars.keySet())
 		{
@@ -113,7 +111,6 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 				}
 			}
 		}
-
 	}
 
 	public void forAllEachEdge(EdgeVisitor visitor)
