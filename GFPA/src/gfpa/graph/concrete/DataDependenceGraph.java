@@ -84,9 +84,7 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 			int n = nodes[i];
 			//check whether some variables are defined on the id.
 			if(definedVars.get(n)==null) continue;
-			BitSet bits = new BitSet(size);
-			bits.set(i);
-			def[i] = bits;
+			def[i].set(i);
 		}
 
 		//calculate REACH(n)
