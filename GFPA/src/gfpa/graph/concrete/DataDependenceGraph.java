@@ -4,10 +4,11 @@ import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.info.Variable;
 import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.EdgeVisitor;
+import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
-import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +27,8 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	private HashMap<Integer, HashSet<Variable>> usedVars = new HashMap<>();
 	private ControlFlowGraph cfgraph;
 	private	TIntSet reachableNodes;
-
+	//for bit operations.
+	private TIntIntHashMap idIndexMap = new TIntIntHashMap();
 	public DataDependenceGraph(ControlFlowGraph cfgraph)
 	{
 		this.cfgraph = cfgraph;
@@ -44,72 +46,102 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	 */
 	public void buildEdges()
 	{
-		HashMap<Integer, TIntHashSet> kill = new HashMap<>();
-		HashMap<Integer, TIntHashSet> reach = new HashMap<>();
 		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
-		assert reachableNodes.size() == nodes.length;
+		int size = nodes.length;
+
+		//calculate id -> index
+		for (int i = 0 ; i < size ; i++)
+			idIndexMap.put(nodes[i], i);
+
+		//initialize each array.
+		BitSet[] kill = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	kill[i] = new BitSet(size);
+		BitSet[] def = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	def[i] = new BitSet(size);
+		BitSet[] reach = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	reach[i] = new BitSet(size);
+
 		//calculate KILL(n)
-		for (int n : nodes)
+		for (int i = 0 ; i < size ; i++)
 		{
-			TIntHashSet killSet = new TIntHashSet();
+			int n = nodes[i];
+			TIntHashSet killedIds = new TIntHashSet();
 			if(definedVars.get(n) == null) continue;
 			for(Variable var : definedVars.get(n))
 			{
 				if(definedIds.get(var) == null) continue;
-				killSet.addAll(definedIds.get(var));
+				killedIds.addAll(definedIds.get(var));
 			}
-			killSet.remove(n);
-			kill.put(n, killSet);
+			killedIds.remove(n);
+
+			for(int killedId : killedIds.toArray())
+				kill[i].set(idIndexMap.get(killedId));
 		}
 
-		//initialize REACH(n)
-		for(int n : nodes)
-			reach.put(n, new TIntHashSet());
+		//calculate DEF(n)
+		for (int i = 0 ; i < size ; i++)
+		{
+			int n = nodes[i];
+			//check whether some variables are defined on the id.
+			if(definedVars.get(n)==null) continue;
+			BitSet bits = new BitSet(size);
+			bits.set(i);
+			def[i] = bits;
+		}
+
 		//calculate REACH(n)
 		boolean isChanged;
 		do
 		{
 			isChanged = false;
-			for(int n : nodes)
+			for(int i = 0 ; i < nodes.length ; i++)
 			{
-				TIntHashSet	newreach = new TIntHashSet();
-				for(int p : cfgraph.getPredecessors(n))
+				BitSet newreach = new BitSet(size);
+				for(int p : cfgraph.getPredecessors(nodes[i]))
 				{
-					//If p is not reachable from the entry node, the definition of p must not be alive.
-					if(reach.get(p) == null) continue;
-
-					TIntHashSet	preach = new TIntHashSet();
+					int indexP = idIndexMap.get(p);
+					BitSet bitsP = new BitSet(size);
 					//REACH(P)
-					preach.addAll(reach.get(p));
-					//KILL(P)
-					TIntHashSet killset = kill.get(p);
+					bitsP.or(reach[indexP]);
 					//REACH(P) - KILL(P)
-					if(killset != null)
-						preach.removeAll(killset);
+					bitsP.andNot(kill[indexP]);
 					//DEF(P) + {REACH(P) - KILL(P)}
-					if(definedVars.get(p) != null)
-						preach.add(p);
-					newreach.addAll(preach);
+					bitsP.or(def[indexP]);
+					newreach.or(bitsP);
 				}
-				if(!newreach.equals(reach.get(n)))
+				if(!newreach.equals(reach[i]))
 				{
 					isChanged = true;
-					reach.put(n, newreach);
+					reach[i] = newreach;
 				}
 			}
 		} while (isChanged);
-		//		dumpReach(reach);
-		//build edges
-		for(int usedId : usedVars.keySet())
+
+		for(int i = 0 ; i < size ; i++)
 		{
-			for(Variable usedVar : usedVars.get(usedId))
+			int to = nodes[i];
+			HashSet<Variable> usedVariables = usedVars.get(to);
+			if(usedVariables == null) continue;
+			for(int defIndex : reach[i].stream().toArray())
 			{
-				for(int reachableDef : reach.get(usedId).toArray())
-				{
-					if(definedVars.get(reachableDef).contains(usedVar))
-						super.putEdge(reachableDef, usedId , usedVar);
-				}
+				int from = nodes[defIndex];
+				HashSet<Variable> defVariables = definedVars.get(from);
+				if(defVariables == null) continue;
+				HashSet<Variable> intersection = new HashSet<Variable>(defVariables);
+				intersection.retainAll(usedVariables);
+				for(Variable v : intersection)
+					super.putEdge(from, to , v);
 			}
+		}
+	}
+
+	//for debug.
+	private void dump(BitSet[] bits)
+	{
+		System.out.println();
+		for(int i = 0 ; i < bits.length ; i++)
+		{
+			System.out.println("bit("+i+")="+ bits[i]);
 		}
 	}
 
@@ -117,19 +149,6 @@ public class DataDependenceGraph extends LabeledDirectedGraph<Variable>
 	{
 		super.forEachEdge(visitor);
 		cfgraph.forEachEdge(visitor);
-	}
-
-	/**
-	 * for debug
-	 */
-	private void dumpReach(HashMap<Integer, TIntHashSet> reach)
-	{
-		for(int i : cfgraph.getNodes())
-		{
-			int[] arr = reach.get(i).toArray();
-			Arrays.sort(arr);
-			System.out.println("REACH("+i+") = "+ Arrays.toString(arr));
-		}
 	}
 
 	public void def(int id, Set<Variable> vars)
