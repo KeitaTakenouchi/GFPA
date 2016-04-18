@@ -92,7 +92,7 @@ public class DirectedGraph
 
 	public int[] getPredecessors(int i)
 	{
-		return reverse.getSuccessors(i);
+		return (reverse != null)? reverse.getSuccessors(i) : new int[0];
 	}
 
 	/**

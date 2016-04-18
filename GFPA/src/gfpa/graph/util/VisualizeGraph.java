@@ -129,8 +129,7 @@ public class VisualizeGraph
 					if(ddgraph.getCFG().isSuccessor(from, to))
 						gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = blue];");
 					else
-//						gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = darkgreen];");
-						gv.addln(from + " -> " + to + "[color = darkgreen];");
+						gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = darkgreen];");
 				}
 				return true;
 			}
