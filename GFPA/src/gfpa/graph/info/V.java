@@ -1,12 +1,12 @@
 package gfpa.graph.info;
 
 
-public class Variable
+public class V
 {
 	private String variable = new String();
 
 
-	public Variable(String variable)
+	public V(String variable)
 	{
 		this.variable = variable;
 	}
@@ -32,7 +32,7 @@ public class Variable
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		Variable other = (Variable) obj;
+		V other = (V) obj;
 		if (variable == null)
 		{
 			if (other.variable != null) return false;

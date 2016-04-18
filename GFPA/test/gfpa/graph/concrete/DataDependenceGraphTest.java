@@ -1,7 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.info.Variable;
 
 import java.util.Arrays;
 
@@ -26,20 +25,20 @@ public class DataDependenceGraphTest
 		cfgraph.putEdge(8, 9);
 		cfgraph.putEdge(9, 4);
 
-		DataDependenceGraph ddgraph = new DataDependenceGraph(cfgraph);
-		ddgraph.def(1, new Variable("j"));
-		ddgraph.def(2, new Variable("i"));
-		ddgraph.use(3, new Variable("i"));
-		ddgraph.def(3, new Variable("i"));
-		ddgraph.use(4, new Variable("j"));
-		ddgraph.def(4, new Variable("j"));
-		ddgraph.use(5, new Variable("j"));
-		ddgraph.def(5, new Variable("c"));
-		ddgraph.use(6, new Variable("i"));
-		ddgraph.def(6, new Variable("j"));
-		ddgraph.use(7, new Variable("i"));
-		ddgraph.def(7, new Variable("c"));
-		ddgraph.def(8, new Variable("i"));
+		DataDependenceGraph<String> ddgraph = new DataDependenceGraph<String>(cfgraph);
+		ddgraph.def(1, new String("j"));
+		ddgraph.def(2, new String("i"));
+		ddgraph.use(3, new String("i"));
+		ddgraph.def(3, new String("i"));
+		ddgraph.use(4, new String("j"));
+		ddgraph.def(4, new String("j"));
+		ddgraph.use(5, new String("j"));
+		ddgraph.def(5, new String("c"));
+		ddgraph.use(6, new String("i"));
+		ddgraph.def(6, new String("j"));
+		ddgraph.use(7, new String("i"));
+		ddgraph.def(7, new String("c"));
+		ddgraph.def(8, new String("i"));
 		ddgraph.buildEdges();
 
 		{
@@ -102,10 +101,10 @@ public class DataDependenceGraphTest
 		cfgraph.putEdge(3, 4);
 		cfgraph.putEdge(4, 5);
 
-		DataDependenceGraph ddgraph = new DataDependenceGraph(cfgraph);
-		ddgraph.def(1, new Variable("i"));
-		ddgraph.def(2, new Variable("i"));
-		ddgraph.use(4, new Variable("i"));
+		DataDependenceGraph<String> ddgraph = new DataDependenceGraph<String>(cfgraph);
+		ddgraph.def(1, new String("i"));
+		ddgraph.def(2, new String("i"));
+		ddgraph.use(4, new String("i"));
 
 		ddgraph.buildEdges();
 		{

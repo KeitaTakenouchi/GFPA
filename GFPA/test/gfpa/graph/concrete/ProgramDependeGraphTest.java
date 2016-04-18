@@ -1,7 +1,7 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.info.Variable;
+import gfpa.graph.info.V;
 
 import java.util.Arrays;
 
@@ -52,15 +52,15 @@ public class ProgramDependeGraphTest
 
 		ControlDependenceGraph cdgraph = new ControlDependenceGraph(cfgraph);
 		DataDependenceGraph dfgraph = new DataDependenceGraph(cfgraph);
-		dfgraph.def(1, new Variable("sum"));
-		dfgraph.def(2, new Variable("i"));
-		dfgraph.use(3, new Variable("i"));
-		dfgraph.use(4, new Variable("sum"));
-		dfgraph.def(4, new Variable("sum"));
-		dfgraph.use(5, new Variable("i"));
-		dfgraph.def(5, new Variable("i"));
-		dfgraph.use(7, new Variable("sum"));
-		dfgraph.use(8, new Variable("i"));
+		dfgraph.def(1, new V("sum"));
+		dfgraph.def(2, new V("i"));
+		dfgraph.use(3, new V("i"));
+		dfgraph.use(4, new V("sum"));
+		dfgraph.def(4, new V("sum"));
+		dfgraph.use(5, new V("i"));
+		dfgraph.def(5, new V("i"));
+		dfgraph.use(7, new V("sum"));
+		dfgraph.use(8, new V("i"));
 		dfgraph.buildEdges();
 
 		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph(dfgraph, cdgraph);
@@ -89,11 +89,11 @@ public class ProgramDependeGraphTest
 	public void test02()
 	{
 		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph();
-		pdgraph.putEdge(0, 1, new Variable("a"));
+		pdgraph.putEdge(0, 1, new V("a"));
 		pdgraph.putEdge(0, 2);
 		pdgraph.putEdge(1, 3);
 		pdgraph.putEdge(2, 3);
-		pdgraph.putEdge(2, 3, new Variable("b"));
+		pdgraph.putEdge(2, 3, new V("b"));
 
 		assertTrue(pdgraph.hasDataDependent(0, 1));
 		assertTrue(pdgraph.hasDataDependent(2, 3));
