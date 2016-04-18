@@ -3,7 +3,6 @@ package gfpa.graph.util;
 import gfpa.graph.common.DirectedGraph;
 import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.concrete.DataDependenceGraph;
-import gfpa.graph.info.V;
 import gfpa.graph.search.EdgeVisitor;
 
 import java.io.File;
@@ -34,7 +33,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportDirectedEdges(LabeledDirectedGraph<V> graph, File out, String type)
+	public static void exportDirectedEdges(LabeledDirectedGraph<?> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -43,7 +42,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportDirectedEdgesSideways(LabeledDirectedGraph<V> graph, File out, String type)
+	public static void exportDirectedEdgesSideways(LabeledDirectedGraph<?> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -53,7 +52,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportAllDirectedEdges(DataDependenceGraph<V> graph, File out, String type)
+	public static void exportAllDirectedEdges(DataDependenceGraph<?> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -62,7 +61,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportAllDirectedEdgesSideways(DataDependenceGraph<V> graph, File out, String type)
+	public static void exportAllDirectedEdgesSideways(DataDependenceGraph<?> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -85,14 +84,14 @@ public class VisualizeGraph
 		});
 	}
 
-	private static void addEdgesWithLabel(LabeledDirectedGraph<V> graph, GraphViz gv)
+	private static void addEdgesWithLabel(LabeledDirectedGraph<?> graph, GraphViz gv)
 	{
 		graph.forEachEdge(new EdgeVisitor()
 		{
 			@Override
 			public boolean perform(int from, int to)
 			{
-				HashSet<V> labels = graph.getLabels(from, to);
+				HashSet<?> labels = graph.getLabels(from, to);
 				if(labels == null)
 				{
 					gv.addln(from + " -> " + to +" [color = red];");
@@ -100,7 +99,7 @@ public class VisualizeGraph
 				else
 				{
 					StringBuffer bf = new StringBuffer();
-					for(V v : labels)
+					for(Object v : labels)
 						bf.append(v.toString()+",");
 					bf.deleteCharAt(bf.length()-1);
 					gv.addln(from + " -> " + to + "[label = \"" + bf.toString() +"\", color = darkgreen];");
@@ -110,14 +109,14 @@ public class VisualizeGraph
 		});
 	}
 
-	private static void addAllEdgesWithLabel(DataDependenceGraph<V> ddgraph, GraphViz gv)
+	private static void addAllEdgesWithLabel(DataDependenceGraph<?> ddgraph, GraphViz gv)
 	{
 		ddgraph.forAllEachEdge(new EdgeVisitor()
 		{
 			@Override
 			public boolean perform(int from, int to)
 			{
-				HashSet<V> labels = ddgraph.getLabels(from, to);
+				HashSet<?> labels = ddgraph.getLabels(from, to);
 				if(labels == null)
 				{
 					gv.addln(from + " -> " + to +" [color = red];");
@@ -125,7 +124,7 @@ public class VisualizeGraph
 				else
 				{
 					StringBuffer bf = new StringBuffer();
-					for(V v : labels)
+					for(Object v : labels)
 						bf.append(v.toString()+",");
 					bf.deleteCharAt(bf.length()-1);
 					if(ddgraph.getCFG().isSuccessor(from, to))
