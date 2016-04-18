@@ -53,7 +53,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportAllDirectedEdges(DataDependenceGraph graph, File out, String type)
+	public static void exportAllDirectedEdges(DataDependenceGraph<V> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -62,7 +62,7 @@ public class VisualizeGraph
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 	}
 
-	public static void exportAllDirectedEdgesSideways(DataDependenceGraph graph, File out, String type)
+	public static void exportAllDirectedEdgesSideways(DataDependenceGraph<V> graph, File out, String type)
 	{
 		GraphViz gv = new GraphViz();
 		gv.addln(gv.start_graph());
@@ -110,7 +110,7 @@ public class VisualizeGraph
 		});
 	}
 
-	private static void addAllEdgesWithLabel(DataDependenceGraph ddgraph, GraphViz gv)
+	private static void addAllEdgesWithLabel(DataDependenceGraph<V> ddgraph, GraphViz gv)
 	{
 		ddgraph.forAllEachEdge(new EdgeVisitor()
 		{

@@ -1,7 +1,6 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
-import gfpa.graph.info.V;
 
 import java.util.Arrays;
 
@@ -51,19 +50,19 @@ public class ProgramDependeGraphTest
 		cfgraph.putEdge(8, 9);
 
 		ControlDependenceGraph cdgraph = new ControlDependenceGraph(cfgraph);
-		DataDependenceGraph dfgraph = new DataDependenceGraph(cfgraph);
-		dfgraph.def(1, new V("sum"));
-		dfgraph.def(2, new V("i"));
-		dfgraph.use(3, new V("i"));
-		dfgraph.use(4, new V("sum"));
-		dfgraph.def(4, new V("sum"));
-		dfgraph.use(5, new V("i"));
-		dfgraph.def(5, new V("i"));
-		dfgraph.use(7, new V("sum"));
-		dfgraph.use(8, new V("i"));
+		DataDependenceGraph<String> dfgraph = new DataDependenceGraph<String>(cfgraph);
+		dfgraph.def(1, new String("sum"));
+		dfgraph.def(2, new String("i"));
+		dfgraph.use(3, new String("i"));
+		dfgraph.use(4, new String("sum"));
+		dfgraph.def(4, new String("sum"));
+		dfgraph.use(5, new String("i"));
+		dfgraph.def(5, new String("i"));
+		dfgraph.use(7, new String("sum"));
+		dfgraph.use(8, new String("i"));
 		dfgraph.buildEdges();
 
-		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph(dfgraph, cdgraph);
+		ProgramDependenceGraph<String> pdgraph = new ProgramDependenceGraph<String>(dfgraph, cdgraph);
 		{
 			int[] expected = {0,2,3,5,6,8};
 			int[] actual = pdgraph.backwardSlice(8);
@@ -88,12 +87,12 @@ public class ProgramDependeGraphTest
 	@Test
 	public void test02()
 	{
-		ProgramDependenceGraph pdgraph = new ProgramDependenceGraph();
-		pdgraph.putEdge(0, 1, new V("a"));
+		ProgramDependenceGraph<String> pdgraph = new ProgramDependenceGraph<String>();
+		pdgraph.putEdge(0, 1, new String("a"));
 		pdgraph.putEdge(0, 2);
 		pdgraph.putEdge(1, 3);
 		pdgraph.putEdge(2, 3);
-		pdgraph.putEdge(2, 3, new V("b"));
+		pdgraph.putEdge(2, 3, new String("b"));
 
 		assertTrue(pdgraph.hasDataDependent(0, 1));
 		assertTrue(pdgraph.hasDataDependent(2, 3));
