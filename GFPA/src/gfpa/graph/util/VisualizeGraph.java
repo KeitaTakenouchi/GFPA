@@ -11,8 +11,7 @@ import java.util.HashSet;
 public class VisualizeGraph
 {
 	private VisualizeGraph()
-	{
-	}
+	{	}
 
 	public static void exportDirectedEdges(DirectedGraph graph, File out, String type)
 	{
