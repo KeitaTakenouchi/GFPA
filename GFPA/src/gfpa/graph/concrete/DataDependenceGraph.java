@@ -177,12 +177,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			if(definedVars.get(n)==null) continue;
 			def[i].set(i);
 		}
-		System.out.print("KILL");
-		dump(kill);
-		System.out.print("DEF");
-		dump(def);
-		System.out.print("REACH BEFORE");
-		dump(reach);
+
 		//calculate REACH(n) with the fixed point algorithm.
 		boolean isChanged;
 		do
@@ -210,9 +205,6 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				}
 			}
 		} while (isChanged);
-		System.out.print("REACH AFTER");
-		dump(reach);
-
 
 		for(int i = 0 ; i < size ; i++)
 		{
@@ -227,7 +219,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				HashSet<V> intersection = new HashSet<V>(defVariables);
 				intersection.retainAll(usedVariables);
 				for(V v : intersection)
-					super.putEdge(from, to , v);
+					putEdge(from, to , v);
 			}
 		}
 	}
