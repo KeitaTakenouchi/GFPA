@@ -130,19 +130,22 @@ public class DataDependenceGraphTest
 
 		DataDependenceGraph<String> ddgraph = new DataDependenceGraph<String>(cfgraph);
 		ddgraph.def(-1, new String("i"));
-		ddgraph.use(1, new String("i"));
+		ddgraph.def(-1, new String("j"));
+		ddgraph.def(1, new String("i"));
 		ddgraph.use(-2, new String("i"));
+		ddgraph.use(-2, new String("j"));
 
 		ddgraph.buildEdges();
+		ddgraph.dumpEdges();
 		{
-			int[] expected = {-2,1};
-			int[] actual = ddgraph.getSuccessors(-1);
+			int[] expected = {-2};
+			int[] actual = ddgraph.getSuccessors(1);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
 		{
-			int[] expected = {-1};
-			int[] actual = ddgraph.getPredecessors(1);
+			int[] expected = {-1,1};
+			int[] actual = ddgraph.getPredecessors(-2);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}

@@ -3,7 +3,9 @@ package gfpa.graph.concrete;
 import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.EdgeVisitor;
+import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntIntHashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
@@ -26,8 +28,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 	private HashMap<Integer, HashSet<V>> usedVars = new HashMap<>();
 	private ControlFlowGraph cfgraph;
 	private	TIntSet reachableNodes;
-	//for bit operations.
-	private TIntIntHashMap idIndexMap = new TIntIntHashMap();
+
 	public DataDependenceGraph(ControlFlowGraph cfgraph)
 	{
 		this.cfgraph = cfgraph;
@@ -41,12 +42,103 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 
 	/**
 	 * Build data-flow edges with a fix-point algorithm.
-	 * Bit operations is faster but not implemented.
 	 */
 	public void buildEdges()
 	{
+		TIntObjectHashMap<TIntArrayList> origID2newIDs = new TIntObjectHashMap<TIntArrayList>();
+		TIntIntHashMap newID2origID = new TIntIntHashMap();
+
+		//new id -> a defined variable
+		TIntObjectHashMap<V> nDefinedVars = new TIntObjectHashMap<>();
+
+		//create new graph nodes and map id -> def,use.
+		int newIdCount = 0;
+		for(int n : cfgraph.getNodes())
+		{
+			TIntArrayList createdIDs = new TIntArrayList();
+			HashSet<V> defVars = definedVars.get(n);
+			if(defVars == null)
+			{
+				createdIDs.add(newIdCount);
+				origID2newIDs.put(n, createdIDs);
+				newID2origID.put(newIdCount, n);
+				newIdCount++;
+				continue;
+			}
+			for(V v : defVars)
+			{
+				createdIDs.add(newIdCount);
+				newID2origID.put(newIdCount, n);
+				nDefinedVars.put(newIdCount, v);
+				newIdCount++;
+			}
+			origID2newIDs.put(n, createdIDs);
+		}
+
+		ControlFlowGraph ncfgraph = new ControlFlowGraph(-1);
+		//create new control flow graph edges.
+		cfgraph.forEachEdge(new EdgeVisitor()
+		{
+			@Override
+			public boolean perform(int from, int to)
+			{
+				for(int nfrom : origID2newIDs.get(from).toArray())
+				{
+					for(int nto : origID2newIDs.get(to).toArray())
+					{
+						ncfgraph.putEdge(nfrom, nto);
+					}
+				}
+				return true;
+			}
+		});
+
+		//add edges from entry node -1 to source ndoes.
+		for(int s : ncfgraph.getSource())
+			ncfgraph.putEdge(-1, s);
+
+		//add def, use to new data dependence graph.
+		DataDependenceGraph<V> nddgraph = new DataDependenceGraph<V>(ncfgraph);
+		for(int newID : ncfgraph.getNodes())
+		{
+			{
+				V var = nDefinedVars.get(newID);
+				if(var != null)
+					nddgraph.def(newID, var);
+			}
+			{
+				int origId = newID2origID.get(newID);
+				HashSet<V> vars = usedVars.get(origId);
+				if(vars != null)
+					nddgraph.use(newID, vars);
+			}
+		}
+		nddgraph.buildEdgesWithSingleDef();
+
+		//create original graph edges with label.
+		nddgraph.forEachEdge(new EdgeVisitor()
+		{
+			@Override
+			public boolean perform(int from, int to)
+			{
+				for(V v : nddgraph.getLabels(from, to))
+					putEdge(newID2origID.get(from), newID2origID.get(to) , v);
+				return true;
+			}
+		});
+	}
+
+	/**
+	 * Build data-flow edges with a fixed-point algorithm.
+	 * Each graph nodes has only one definition.
+	 */
+	private void buildEdgesWithSingleDef()
+	{
 		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
 		int size = nodes.length;
+
+		//map : node id -> index
+		TIntIntHashMap idIndexMap = new TIntIntHashMap();
 
 		//calculate id -> index
 		for (int i = 0 ; i < size ; i++)
@@ -85,7 +177,12 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			if(definedVars.get(n)==null) continue;
 			def[i].set(i);
 		}
-
+		System.out.print("KILL");
+		dump(kill);
+		System.out.print("DEF");
+		dump(def);
+		System.out.print("REACH BEFORE");
+		dump(reach);
 		//calculate REACH(n) with the fixed point algorithm.
 		boolean isChanged;
 		do
@@ -113,6 +210,9 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				}
 			}
 		} while (isChanged);
+		System.out.print("REACH AFTER");
+		dump(reach);
+
 
 		for(int i = 0 ; i < size ; i++)
 		{
@@ -141,6 +241,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			System.out.println("bit("+i+")="+ bits[i]);
 		}
 	}
+
 
 	public void forAllEachEdge(EdgeVisitor visitor)
 	{
