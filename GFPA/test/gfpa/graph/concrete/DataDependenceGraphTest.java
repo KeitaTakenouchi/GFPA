@@ -136,7 +136,6 @@ public class DataDependenceGraphTest
 		ddgraph.use(-2, new String("j"));
 
 		ddgraph.buildEdges();
-		ddgraph.dumpEdges();
 		{
 			int[] expected = {-2};
 			int[] actual = ddgraph.getSuccessors(1);
@@ -146,6 +145,45 @@ public class DataDependenceGraphTest
 		{
 			int[] expected = {-1,1};
 			int[] actual = ddgraph.getPredecessors(-2);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+	}
+
+	@Test
+	public void test04()
+	{
+		ControlFlowGraph cfgraph = new ControlFlowGraph(0);
+		cfgraph.putEdge(0, 1);
+		cfgraph.putEdge(1, 3);
+		cfgraph.putEdge(0, 2);
+		cfgraph.putEdge(2, 3);
+		cfgraph.putEdge(3, 4);
+
+		DataDependenceGraph<String> ddgraph = new DataDependenceGraph<String>(cfgraph);
+		ddgraph.def(0, new String("i"));
+		ddgraph.def(0, new String("j"));
+		ddgraph.def(0, new String("k"));
+		ddgraph.use(1, new String("i"));
+		ddgraph.def(1, new String("i"));
+		ddgraph.use(2, new String("k"));
+		ddgraph.def(2, new String("k"));
+		ddgraph.use(3, new String("i"));
+		ddgraph.use(3, new String("k"));
+		ddgraph.def(3, new String("j"));
+		ddgraph.use(4, new String("j"));
+		ddgraph.use(4, new String("k"));
+
+		ddgraph.buildEdges();
+		{
+			int[] expected = {0,1,2};
+			int[] actual = ddgraph.getPredecessors(3);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {0,2,3};
+			int[] actual = ddgraph.getPredecessors(4);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
 		}
