@@ -126,17 +126,16 @@ public class DataDependenceGraphTest
 	{
 		ControlFlowGraph cfgraph = new ControlFlowGraph(-1);
 		cfgraph.putEdge(-1, 1);
-		cfgraph.putEdge(1, 2);
+		cfgraph.putEdge(1, -2);
 
 		DataDependenceGraph<String> ddgraph = new DataDependenceGraph<String>(cfgraph);
 		ddgraph.def(-1, new String("i"));
 		ddgraph.use(1, new String("i"));
-		ddgraph.use(2, new String("i"));
+		ddgraph.use(-2, new String("i"));
 
 		ddgraph.buildEdges();
-
 		{
-			int[] expected = {1,2};
+			int[] expected = {-2,1};
 			int[] actual = ddgraph.getSuccessors(-1);
 			Arrays.sort(actual);
 			assertArrayEquals(expected, actual);
