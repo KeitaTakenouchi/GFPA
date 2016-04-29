@@ -122,5 +122,32 @@ public class DataDependenceGraphTest
 		}
 	}
 
+	@Test
+	public void test03()
+	{
+		ControlFlowGraph cfgraph = new ControlFlowGraph(1);
+		cfgraph.putEdge(1, 2);
+		cfgraph.putEdge(2, 3);
+
+		DataDependenceGraph ddgraph = new DataDependenceGraph(cfgraph);
+		ddgraph.def(1, new Variable("i"));
+		ddgraph.def(2, new Variable("i"));
+		ddgraph.use(3, new Variable("i"));
+
+		ddgraph.buildEdges();
+		{
+			int[] expected = {};
+			int[] actual = ddgraph.getSuccessors(1);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+		{
+			int[] expected = {2};
+			int[] actual = ddgraph.getPredecessors(3);
+			Arrays.sort(actual);
+			assertArrayEquals(expected, actual);
+		}
+	}
+
 
 }
