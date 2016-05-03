@@ -92,7 +92,7 @@ public class DirectedGraph
 
 	public int[] getPredecessors(int i)
 	{
-		return reverse.getSuccessors(i);
+		return (reverse != null)? reverse.getSuccessors(i) : new int[0];
 	}
 
 	/**
@@ -131,7 +131,9 @@ public class DirectedGraph
 
 	public int[] getSource()
 	{
+
 		TIntHashSet ret = new TIntHashSet();
+		if(reverse == null) return ret.toArray();
 		ret.addAll(nodes);
 		ret.removeAll(reverse.edges.keySet());
 		return ret.toArray();
@@ -139,7 +141,7 @@ public class DirectedGraph
 
 	public int[] getSinks()
 	{
-		return reverse.getSource();
+		return (reverse != null)? reverse.getSource() : new int[0];
 	}
 
 	public DirectedGraph getReversedGraph()
