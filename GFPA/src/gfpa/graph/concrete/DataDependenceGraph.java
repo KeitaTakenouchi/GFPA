@@ -3,7 +3,7 @@ package gfpa.graph.concrete;
 import gfpa.graph.common.LabeledDirectedGraph;
 import gfpa.graph.search.DepthFirstSearch;
 import gfpa.graph.search.EdgeVisitor;
-import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
@@ -45,7 +45,8 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 	 */
 	public void buildEdges()
 	{
-		TIntObjectHashMap<TIntArrayList> origID2newIDs = new TIntObjectHashMap<TIntArrayList>();
+
+		TIntObjectHashMap<TIntLinkedList> origID2newIDs = new TIntObjectHashMap<TIntLinkedList>();
 		TIntIntHashMap newID2origID = new TIntIntHashMap();
 
 		//new id -> a defined variable
@@ -55,7 +56,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 		int newIdCount = 0;
 		for(int n : cfgraph.getNodes())
 		{
-			TIntArrayList createdIDs = new TIntArrayList();
+			TIntLinkedList createdIDs = new TIntLinkedList();
 			HashSet<V> defVars = definedVars.get(n);
 			if(defVars == null)
 			{
@@ -76,19 +77,28 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 		}
 
 		ControlFlowGraph ncfgraph = new ControlFlowGraph(-1);
+		//create new control flow graph edges within original nodes.
+		for(int n : cfgraph.getNodes())
+		{
+			TIntLinkedList newIds = origID2newIDs.get(n);
+			int previous = -3;
+			for(int newId : newIds.toArray())
+			{
+				if(previous != -3)
+					ncfgraph.putEdge(previous, newId);
+				previous = newId;
+			}
+		}
+
 		//create new control flow graph edges.
 		cfgraph.forEachEdge(new EdgeVisitor()
 		{
 			@Override
 			public boolean perform(int from, int to)
 			{
-				for(int nfrom : origID2newIDs.get(from).toArray())
-				{
-					for(int nto : origID2newIDs.get(to).toArray())
-					{
-						ncfgraph.putEdge(nfrom, nto);
-					}
-				}
+				TIntLinkedList fromNewIds = origID2newIDs.get(from);
+				TIntLinkedList toNewIds = origID2newIDs.get(to);
+				ncfgraph.putEdge(fromNewIds.max(), toNewIds.min());
 				return true;
 			}
 		});
