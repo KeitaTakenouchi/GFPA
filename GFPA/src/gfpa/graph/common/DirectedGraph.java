@@ -73,7 +73,7 @@ public class DirectedGraph
 
 	public boolean isLeaf(int i)
 	{
-		return getSuccessors(i).length == 0;
+		return nodes.contains(i) && getSuccessors(i).length == 0;
 	}
 
 	public int[] getConnected(int i)
@@ -101,6 +101,7 @@ public class DirectedGraph
 	 */
 	public int[] reachableFrom(int i)
 	{
+		if(!nodes.contains(i)) return new int[0];
 		TIntSet ret = new TIntHashSet();
 		TIntArrayStack worklist = new TIntArrayStack();
 		worklist.push(i);
@@ -126,7 +127,7 @@ public class DirectedGraph
 	 */
 	public int[] reachableTo(int i)
 	{
-		return reverse.reachableFrom(i);
+		return (reverse != null)? reverse.reachableFrom(i) : new int[0];
 	}
 
 	public int[] getSource()

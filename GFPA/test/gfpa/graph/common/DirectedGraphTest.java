@@ -296,4 +296,82 @@ public class DirectedGraphTest
 		assertEquals(g.edgeSize(), edges);
 		assertEquals(4, graphs.length);
 	}
+
+	@Test
+	public void test11()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertNull(graph.getReversedGraph());
+	}
+
+	@Test
+	public void test12()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertFalse(graph.isLeaf(1000));
+	}
+
+	@Test
+	public void test13()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.edgeSize(), 0);
+	}
+
+	@Test
+	public void test14()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.size(), 0);
+	}
+
+	@Test
+	public void test15()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.dividedGraphs().length, 0);
+	}
+
+	@Test
+	public void test16()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.getNodes().length, 0);
+	}
+
+	@Test
+	public void test17()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.getSource().length, 0);
+	}
+
+	@Test
+	public void test18()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.getSinks().length, 0);
+	}
+
+	@Test
+	public void test19()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.getSuccessors(1).length, 0);
+	}
+
+	@Test
+	public void test20()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.reachableFrom(1).length, 0);
+	}
+
+	@Test
+	public void test21()
+	{
+		DirectedGraph graph = new DirectedGraph();
+		assertEquals(graph.reachableTo(1).length, 0);
+	}
+
 }
