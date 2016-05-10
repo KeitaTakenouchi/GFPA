@@ -1,19 +1,18 @@
 package gfpa.graph.concrete;
 
 import gfpa.graph.common.LabeledDirectedGraph;
-import gfpa.graph.info.Variable;
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.TIntHashSet;
 
-public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
+public class ProgramDependenceGraph<V> extends LabeledDirectedGraph<V>
 {
 	private TIntObjectHashMap<TIntHashSet> ddedges = new TIntObjectHashMap<TIntHashSet>();
 	private TIntObjectHashMap<TIntHashSet> cdedges = new TIntObjectHashMap<TIntHashSet>();
 
 	public ProgramDependenceGraph(){}
 
-	public ProgramDependenceGraph(DataDependenceGraph ddgraph, ControlDependenceGraph cdgraph)
+	public ProgramDependenceGraph(DataDependenceGraph<V> ddgraph, ControlDependenceGraph cdgraph)
 	{
 		importEdgesFrom(ddgraph);
 		importEdgesFrom(cdgraph);
@@ -39,7 +38,7 @@ public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 		});
 	}
 
-	public ProgramDependenceGraph(DataDependenceGraph datafg, ControlFlowGraph cfg)
+	public ProgramDependenceGraph(DataDependenceGraph<V> datafg, ControlFlowGraph cfg)
 	{
 		this(datafg, new ControlDependenceGraph(cfg));
 	}
@@ -55,7 +54,7 @@ public class ProgramDependenceGraph extends LabeledDirectedGraph<Variable>
 	}
 
 	@Override
-	public void putEdge(int from, int to, Variable label)
+	public void putEdge(int from, int to, V label)
 	{
 		putddedge(from, to);
 		super.putEdge(from, to, label);
