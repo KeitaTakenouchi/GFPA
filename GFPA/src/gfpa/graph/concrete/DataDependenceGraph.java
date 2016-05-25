@@ -159,10 +159,10 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 		for(int i = 0 ; i < size ; i++)	kill[i] = new BitSet(size);
 		BitSet[] def = new BitSet[size];
 		for(int i = 0 ; i < size ; i++)	def[i] = new BitSet(size);
-		BitSet[] in = new BitSet[size];
-		for(int i = 0 ; i < size ; i++)	in[i] = new BitSet(size);
 		BitSet[] out = new BitSet[size];
 		for(int i = 0 ; i < size ; i++)	out[i] = new BitSet(size);
+		BitSet[] in = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	in[i] = new BitSet(size);
 
 		//calculate KILL(n)
 		for (int i = 0 ; i < size ; i++)
@@ -180,7 +180,6 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			for(int killedId : killedIds.toArray())
 				kill[i].set(idIndexMap.get(killedId));
 		}
-
 		//calculate DEF(n)
 		for (int i = 0 ; i < size ; i++)
 		{
@@ -189,14 +188,13 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			if(definedVars.get(n)==null) continue;
 			def[i].set(i);
 		}
-		dump(def);
+
 		//calculate out(n) with the fixed point algorithm.
 		TIntLinkedList worklist = new TIntLinkedList();
 		for(int i = 0 ; i < nodes.length ; i++)
 			worklist.add(i);
 		while(!worklist.isEmpty())
 		{
-			System.out.println(worklist);
 			int i = worklist.removeAt(0);
 			BitSet newin = new BitSet(size);
 			for(int p : cfgraph.getPredecessors(nodes[i]))
@@ -204,10 +202,11 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				int indexP = idIndexMap.get(p);
 				newin.or(out[indexP]);
 			}
+			in[i] = newin;
 			BitSet oldOut = out[i];
 			BitSet newout = new BitSet(size);
 			//in[i]
-			newout.or(in[i]);
+			newout.or(newin);
 			//in[i] - kill[i]
 			newout.andNot(kill[i]);
 			//gen[i] + (in[i] - kill[i])
