@@ -159,8 +159,10 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 		for(int i = 0 ; i < size ; i++)	kill[i] = new BitSet(size);
 		BitSet[] def = new BitSet[size];
 		for(int i = 0 ; i < size ; i++)	def[i] = new BitSet(size);
-		BitSet[] reach = new BitSet[size];
-		for(int i = 0 ; i < size ; i++)	reach[i] = new BitSet(size);
+		BitSet[] in = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	in[i] = new BitSet(size);
+		BitSet[] out = new BitSet[size];
+		for(int i = 0 ; i < size ; i++)	out[i] = new BitSet(size);
 
 		//calculate KILL(n)
 		for (int i = 0 ; i < size ; i++)
@@ -187,41 +189,46 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			if(definedVars.get(n)==null) continue;
 			def[i].set(i);
 		}
-
-		//calculate REACH(n) with the fixed point algorithm.
-		boolean isChanged;
-		do
+		dump(def);
+		//calculate out(n) with the fixed point algorithm.
+		TIntLinkedList worklist = new TIntLinkedList();
+		for(int i = 0 ; i < nodes.length ; i++)
+			worklist.add(i);
+		while(!worklist.isEmpty())
 		{
-			isChanged = false;
-			for(int i = 0 ; i < nodes.length ; i++)
+			System.out.println(worklist);
+			int i = worklist.removeAt(0);
+			BitSet newin = new BitSet(size);
+			for(int p : cfgraph.getPredecessors(nodes[i]))
 			{
-				BitSet newreach = new BitSet(size);
-				for(int p : cfgraph.getPredecessors(nodes[i]))
+				int indexP = idIndexMap.get(p);
+				newin.or(out[indexP]);
+			}
+			BitSet oldOut = out[i];
+			BitSet newout = new BitSet(size);
+			//in[i]
+			newout.or(in[i]);
+			//in[i] - kill[i]
+			newout.andNot(kill[i]);
+			//gen[i] + (in[i] - kill[i])
+			newout.or(def[i]);
+			if(!newout.equals(oldOut))
+			{
+				out[i] = newout;
+				for(int s : cfgraph.getSuccessors(nodes[i]))
 				{
-					int indexP = idIndexMap.get(p);
-					BitSet bitsP = new BitSet(size);
-					//REACH(P)
-					bitsP.or(reach[indexP]);
-					//REACH(P) - KILL(P)
-					bitsP.andNot(kill[indexP]);
-					//DEF(P) + {REACH(P) - KILL(P)}
-					bitsP.or(def[indexP]);
-					newreach.or(bitsP);
-				}
-				if(!newreach.equals(reach[i]))
-				{
-					isChanged = true;
-					reach[i] = newreach;
+					if(!worklist.contains(idIndexMap.get(s)))
+						worklist.add(idIndexMap.get(s));
 				}
 			}
-		} while (isChanged);
+		}
 
 		for(int i = 0 ; i < size ; i++)
 		{
 			int to = nodes[i];
 			HashSet<V> usedVariables = usedVars.get(to);
 			if(usedVariables == null) continue;
-			for(int defIndex : reach[i].stream().toArray())
+			for(int defIndex : in[i].stream().toArray())
 			{
 				int from = nodes[defIndex];
 				HashSet<V> defVariables = definedVars.get(from);
