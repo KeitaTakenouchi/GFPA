@@ -1,7 +1,9 @@
 package gfpa.graph.concrete;
 
 import static org.junit.Assert.*;
+import gfpa.graph.util.VisualizeGraph;
 
+import java.io.File;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -76,6 +78,9 @@ public class ControlDependenceGraphTest
 		}
 	}
 
+	/**
+	 * {@link}
+	 */
 	@Test
 	public void test02()
 	{
@@ -91,6 +96,8 @@ public class ControlDependenceGraphTest
 		cfgraph.putEdge(6, 7);
 		cfgraph.putEdge(7, 8);
 		ControlDependenceGraph cdg = new ControlDependenceGraph(cfgraph);
+		VisualizeGraph.exportDirectedEdges(cfgraph, new File("c:/jobnetio/out/cfg.svg"), "svg");
+		VisualizeGraph.exportDirectedEdges(cdg, new File("c:/jobnetio/out/cdg.svg"), "svg");
 		{
 			int[] expected = {1,7,8};
 			int[] actual = cdg.getSuccessors(0);

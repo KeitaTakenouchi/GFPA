@@ -22,6 +22,7 @@ public class DepthFirstSearch {
 		{
 			int w = worklist.pop();
 			if(isPassed.contains(w)) continue;
+
 			isPassed.add(w);
 			boolean isContinue = visitor.onVisit(w);
 			if(!isContinue) break;
@@ -33,6 +34,22 @@ public class DepthFirstSearch {
 					worklist.push(c);
 				}
 			}
+		}
+	}
+
+	private static class Node
+	{
+		private TIntArrayList successors = new TIntArrayList();
+		private int edgeIndex = 0;
+
+		public int hasNext()
+		{
+			return 0;
+		}
+
+		public int nextSucc()
+		{
+			return 0;
 		}
 	}
 
