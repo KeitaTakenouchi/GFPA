@@ -1,13 +1,16 @@
 package gfpa.graph.concrete;
 
+import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.DepthFirstSearchVisitor;
+import gnu.trove.list.TIntList;
+import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.TIntHashSet;
 
-import java.util.HashMap;
-
 public class DominanceFrontier
 {
-	private HashMap<Integer, TIntSet> dominanceFrontiers = new HashMap<Integer, TIntSet>();
+	private TIntObjectHashMap<TIntSet>  dominanceFrontiers = new TIntObjectHashMap<>();;
 
 	public DominanceFrontier(ControlFlowGraph cfgraph)
 	{
@@ -17,25 +20,44 @@ public class DominanceFrontier
 	}
 
 	/**
-	 * resolving dominance frontiers by recursive calls in depth first order.
+	 * resolving dominance frontiers in post order of depth first order.
 	 */
-	private TIntSet buildDominanceFrontier(int x, ControlFlowGraph cfgraph, DominatorTree domtree)
+	private void buildDominanceFrontier(int root, ControlFlowGraph cfgraph, DominatorTree domtree)
 	{
-		TIntSet dfrontier = new TIntHashSet();
-		for(int y : cfgraph.getSuccessors(x)){
-			if(domtree.immediateDominator(y) != x){
-				dfrontier.add(y);
+		TIntList list = new TIntArrayList();
+		DepthFirstSearch.search(domtree, root, new DepthFirstSearchVisitor()
+		{
+			@Override
+			public boolean onVisit(int id)
+			{
+				return true;
 			}
-		}
-		for(int z : domtree.getSuccessors(x)){
-			for(int y : buildDominanceFrontier(z,cfgraph,domtree).toArray()){
+
+			@Override
+			public boolean onLeave(int id)
+			{
+				list.add(id);
+				return true;
+			}
+		});
+
+		for(int x : list.toArray())
+		{
+			TIntSet dfrontier = new TIntHashSet();
+			for(int y : cfgraph.getSuccessors(x)){
 				if(domtree.immediateDominator(y) != x){
 					dfrontier.add(y);
 				}
 			}
+			for(int z : domtree.getSuccessors(x)){
+				for(int y : dominanceFrontiers.get(z).toArray()){
+					if(domtree.immediateDominator(y) != x){
+						dfrontier.add(y);
+					}
+				}
+			}
+			dominanceFrontiers.put(x, dfrontier);
 		}
-		dominanceFrontiers.put(x, dfrontier);
-		return dfrontier;
 	}
 
 	public int[] dominanceFrontier(int id)
