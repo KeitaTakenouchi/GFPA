@@ -75,6 +75,12 @@ public class DominatorTree extends DirectedGraph
 					}
 					return true;
 				}
+
+				@Override
+				public boolean onLeave(int id)
+				{
+					return true;
+				}
 			});
 		}
 	}

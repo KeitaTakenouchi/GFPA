@@ -4,7 +4,8 @@ import gfpa.graph.common.DirectedGraph;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.set.hash.TIntHashSet;
-import gnu.trove.stack.array.TIntArrayStack;
+
+import java.util.Stack;
 
 public class DepthFirstSearch {
 
@@ -14,42 +15,58 @@ public class DepthFirstSearch {
 
 	public static void search(DirectedGraph graph, int startId, DepthFirstSearchVisitor visitor)
 	{
-		TIntArrayStack worklist = new TIntArrayStack();
-		worklist.push(startId);
+		Stack<Node> stack = new Stack<Node>();
 		TIntHashSet isPassed = new TIntHashSet();
+		stack.push(new Node(startId));
 
-		while (worklist.size() > 0)
+		while (!stack.isEmpty())
 		{
-			int w = worklist.pop();
-			if(isPassed.contains(w)) continue;
+			Node node = stack.peek();
 
-			isPassed.add(w);
-			boolean isContinue = visitor.onVisit(w);
-			if(!isContinue) break;
-
-			for(int c : graph.getSuccessors(w))
+			if(!isPassed.contains(node.getId()))//first visit
 			{
-				if(!isPassed.contains(c))
-				{
-					worklist.push(c);
-				}
+				isPassed.add(node.getId());
+				boolean isContinue = visitor.onVisit(node.getId());
+				if(!isContinue) break;
 			}
+
+			int[] succ = graph.getSuccessors(node.getId());
+			int index = node.getEdgeIndex();
+			if(index < succ.length)
+			{
+				int s = succ[index];
+				if(!isPassed.contains(s))
+					stack.push(new Node(s));
+			}
+			else
+			{
+				boolean isContinue = visitor.onLeave(node.getId());
+				if(!isContinue) break;
+				stack.pop();
+			}
+
 		}
 	}
 
 	private static class Node
 	{
-		private TIntArrayList successors = new TIntArrayList();
+		private int id;
 		private int edgeIndex = 0;
 
-		public int hasNext()
+		public Node(int id)
 		{
-			return 0;
+			this.id = id;
 		}
 
-		public int nextSucc()
+		public int getId()
 		{
-			return 0;
+			return id;
+		}
+
+		public int getEdgeIndex()
+		{
+			edgeIndex++;
+			return edgeIndex - 1;
 		}
 	}
 
@@ -62,6 +79,12 @@ public class DepthFirstSearch {
 			public boolean onVisit(int id)
 			{
 				ret.add(id);
+				return true;
+			}
+
+			@Override
+			public boolean onLeave(int id)
+			{
 				return true;
 			}
 		});

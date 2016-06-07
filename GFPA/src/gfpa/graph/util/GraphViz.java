@@ -71,12 +71,14 @@ public class GraphViz
 	/**
 	 * The dir. where temporary files will be created.
 	 */
-	private static String TEMP_DIR = "C:/tmp/graphviz_tmp/";
+//	private static String TEMP_DIR = "C:/tmp/graphviz_tmp/";
+	private static String TEMP_DIR = "C:/space/";
 
 	/**
 	 * Where is your dot program located? It will be called externally.
 	 */
-	private static String DOT = "C:/Program Files/Graphviz2.38/bin/dot.exe";
+//	private static String DOT = "C:/Program Files/Graphviz2.38/bin/dot.exe";
+	private static String DOT = "C:/Users/Takenouchi/Downloads/graphviz/bin/dot.exe";
 
 	/**
 	 * The source of the graph written in dot language.
