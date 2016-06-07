@@ -29,9 +29,9 @@ public class DepthFirstSearchTest {
 		{
 			int i = 0;
 			@Override
-			public boolean onVisit(int to)
+			public boolean onVisit(int id)
 			{
-				actual[i++] = to;
+				actual[i++] = id;
 				return true;
 			}
 			@Override
@@ -42,7 +42,7 @@ public class DepthFirstSearchTest {
 		});
 		int[] expected = {0, 1, 3, 6, 200, 5, 4, 2};
 		Arrays.sort(expected);
-//		System.out.println(Arrays.toString(actual));
+		//		System.out.println(Arrays.toString(actual));
 		Arrays.sort(actual);
 		assertArrayEquals(expected, actual);
 	}
@@ -58,27 +58,33 @@ public class DepthFirstSearchTest {
 		cfgraph.putEdge(3, 4);
 		cfgraph.putEdge(3, 5);
 
-		int[] actual = new int[cfgraph.size()];
+		int[] actualOn = new int[cfgraph.size()];
+		int[] actualLeave = new int[cfgraph.size()];
 		DepthFirstSearch.search(cfgraph, 0,	new DepthFirstSearchVisitor()
 		{
 			int i = 0;
+			int j = 0;
 			@Override
-			public boolean onVisit(int to)
+			public boolean onVisit(int id)
 			{
-				actual[i++] = to;
+				actualOn[i++] = id;
 				return true;
 			}
 			@Override
 			public boolean onLeave(int id)
 			{
+				actualLeave[j++] = id;
 				return true;
 			}
 		});
-		int[] expected = {0, 1,3,4,5,2};
-		Arrays.sort(expected);
-//		System.out.println(Arrays.toString(actual));
-		Arrays.sort(actual);
-		assertArrayEquals(expected, actual);
+		{
+			int[] expected = {0,2,3,5,4,1};
+			assertArrayEquals(expected, actualOn);
+		}
+		{
+			int[] expected = {5,4,3,2,1,0};
+			assertArrayEquals(expected, actualLeave);
+		}
 	}
 
 }
