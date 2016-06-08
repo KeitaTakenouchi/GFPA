@@ -14,7 +14,7 @@ public class GraphSearch {
 	{
 	}
 
-	public static void depthFirstSearch(DirectedGraph graph, int startId, DepthFirstSearchVisitor visitor)
+	public static void depthFirstSearch(DirectedGraph graph, int startId, GraphSearchVisitor visitor)
 	{
 		Stack<Node> stack = new Stack<Node>();
 		TIntHashSet isPassed = new TIntHashSet();
@@ -49,7 +49,7 @@ public class GraphSearch {
 		}
 	}
 
-	public static void widthFirstSearch(DirectedGraph graph, int startId, DepthFirstSearchVisitor visitor)
+	public static void widthFirstSearch(DirectedGraph graph, int startId, GraphSearchVisitor visitor)
 	{
 		LinkedList<Node> queue = new LinkedList<Node>();
 		TIntHashSet isPassed = new TIntHashSet();
@@ -135,7 +135,7 @@ public class GraphSearch {
 	public static int[] depthFirstOrderArray(DirectedGraph graph, int startId)
 	{
 		TIntList ret = new TIntArrayList();
-		depthFirstSearch(graph, startId, new DepthFirstSearchVisitor()
+		depthFirstSearch(graph, startId, new GraphSearchVisitor()
 		{
 			@Override
 			public boolean onVisit(int id)

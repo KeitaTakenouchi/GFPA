@@ -2,7 +2,7 @@ package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
 import gfpa.graph.search.GraphSearch;
-import gfpa.graph.search.DepthFirstSearchVisitor;
+import gfpa.graph.search.GraphSearchVisitor;
 import gnu.trove.map.hash.TIntIntHashMap;
 
 import java.util.Arrays;
@@ -62,7 +62,7 @@ public class DominatorTree extends DirectedGraph
 		for(int to : nodes)
 		{
 			int i = idIndexMap.get(to);
-			GraphSearch.depthFirstSearch(reversedGraph, to, new DepthFirstSearchVisitor()
+			GraphSearch.depthFirstSearch(reversedGraph, to, new GraphSearchVisitor()
 			{
 				@Override
 				public boolean onVisit(int from)

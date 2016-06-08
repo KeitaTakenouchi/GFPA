@@ -1,6 +1,6 @@
 package gfpa.graph.search;
 
-public interface DepthFirstSearchVisitor {
+public interface GraphSearchVisitor {
 	/**
 	 * @param id
 	 * @return Return true if continue to search.Return false if stop searching.

@@ -25,7 +25,7 @@ public class GraphSearchTest {
 		cfgraph.putEdge(6, 200);
 
 		int[] actual = new int[cfgraph.size()];
-		GraphSearch.depthFirstSearch(cfgraph, 0,	new DepthFirstSearchVisitor()
+		GraphSearch.depthFirstSearch(cfgraph, 0,	new GraphSearchVisitor()
 		{
 			int i = 0;
 			@Override
@@ -60,7 +60,7 @@ public class GraphSearchTest {
 
 		int[] actualOn = new int[cfgraph.size()];
 		int[] actualLeave = new int[cfgraph.size()];
-		GraphSearch.depthFirstSearch(cfgraph, 0,	new DepthFirstSearchVisitor()
+		GraphSearch.depthFirstSearch(cfgraph, 0,	new GraphSearchVisitor()
 		{
 			int i = 0;
 			int j = 0;
@@ -99,7 +99,7 @@ public class GraphSearchTest {
 		cfgraph.putEdge(3, 5);
 
 		int[] actualOn = new int[cfgraph.size()];
-		GraphSearch.widthFirstSearch(cfgraph, 0,	new DepthFirstSearchVisitor()
+		GraphSearch.widthFirstSearch(cfgraph, 0,	new GraphSearchVisitor()
 		{
 			int i = 0;
 			@Override
@@ -134,7 +134,7 @@ public class GraphSearchTest {
 		cfgraph.putEdge(7, 5);
 
 		int[] actualOn = new int[cfgraph.size()];
-		GraphSearch.widthFirstSearch(cfgraph, 0,	new DepthFirstSearchVisitor()
+		GraphSearch.widthFirstSearch(cfgraph, 0,	new GraphSearchVisitor()
 		{
 			int i = 0;
 			@Override
