@@ -1,7 +1,8 @@
 package gfpa.graph.concrete;
 
+
 import gfpa.graph.common.LabeledDirectedGraph;
-import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.GraphSearch;
 import gfpa.graph.search.EdgeVisitor;
 import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -19,14 +20,14 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 	/**
 	 * id -> set of defined variables.
 	 */
-	private HashMap<Integer, HashSet<V>> definedVars = new HashMap<>();
+	protected HashMap<Integer, HashSet<V>> definedVars = new HashMap<>();
 
 	/**
 	 * variable -> set of ids.
 	 */
-	private HashMap<V, TIntHashSet> definedIds = new HashMap<>();
-	private HashMap<Integer, HashSet<V>> usedVars = new HashMap<>();
-	private ControlFlowGraph cfgraph;
+	protected HashMap<V, TIntHashSet> definedIds = new HashMap<>();
+	protected HashMap<Integer, HashSet<V>> usedVars = new HashMap<>();
+	protected ControlFlowGraph cfgraph;
 	private	TIntSet reachableNodes;
 
 	public DataDependenceGraph(ControlFlowGraph cfgraph)
@@ -142,9 +143,9 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 	 * Build data-flow edges with a fixed-point algorithm.
 	 * Each graph nodes has only one definition.
 	 */
-	private void buildEdgesWithSingleDef()
+	public void buildEdgesWithSingleDef()
 	{
-		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
+		int[] nodes = GraphSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
 		int size = nodes.length;
 
 		//map : node id -> index
@@ -190,12 +191,21 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 		}
 
 		//calculate out(n) with the fixed point algorithm.
-		TIntLinkedList worklist = new TIntLinkedList();
+		TIntLinkedList worklist = new TIntLinkedList(nodes.length);
+		TIntHashSet workSet = new TIntHashSet(nodes.length);
 		for(int i = 0 ; i < nodes.length ; i++)
-			worklist.add(i);
-		while(!worklist.isEmpty())
 		{
+			worklist.add(i);
+			workSet.add(i);
+		}
+		System.out.println("\nSTART \t:"+cfgraph.size());
+		int count= 0;
+		while(!workSet.isEmpty())
+		{
+			count++;
 			int i = worklist.removeAt(0);
+
+			workSet.remove(i);
 			BitSet newin = new BitSet(size);
 			for(int p : cfgraph.getPredecessors(nodes[i]))
 			{
@@ -203,7 +213,6 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				newin.or(out[indexP]);
 			}
 			in[i] = newin;
-			BitSet oldOut = out[i];
 			BitSet newout = new BitSet(size);
 			//in[i]
 			newout.or(newin);
@@ -211,17 +220,21 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			newout.andNot(kill[i]);
 			//gen[i] + (in[i] - kill[i])
 			newout.or(def[i]);
-			if(!newout.equals(oldOut))
+			if(!newout.equals(out[i]))
 			{
 				out[i] = newout;
 				for(int s : cfgraph.getSuccessors(nodes[i]))
 				{
-					if(!worklist.contains(idIndexMap.get(s)))
-						worklist.add(idIndexMap.get(s));
+					int index = idIndexMap.get(s);
+					if(!workSet.contains(index))
+					{
+						worklist.add(index);
+						workSet.add(index);
+					}
 				}
 			}
 		}
-
+		System.out.println("GOAL \t:" + count);
 		for(int i = 0 ; i < size ; i++)
 		{
 			int to = nodes[i];

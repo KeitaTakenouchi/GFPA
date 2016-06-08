@@ -1,7 +1,7 @@
 package gfpa.graph.concrete;
 
 import gfpa.graph.common.DirectedGraph;
-import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.GraphSearch;
 import gfpa.graph.search.DepthFirstSearchVisitor;
 import gnu.trove.map.hash.TIntIntHashMap;
 
@@ -21,7 +21,7 @@ public class DominatorTree extends DirectedGraph
 		this.entryId = cfgraph.getEntryId();
 		this.size = cfgraph.size();
 		this.dominator = new BitSet[size];
-		int[] nodes = DepthFirstSearch.depthFirstOrderArray(cfgraph, entryId);
+		int[] nodes = GraphSearch.depthFirstOrderArray(cfgraph, entryId);
 		//initialize dominator value.
 		for(int i = 0  ; i < nodes.length ; i++ )
 		{
@@ -62,7 +62,7 @@ public class DominatorTree extends DirectedGraph
 		for(int to : nodes)
 		{
 			int i = idIndexMap.get(to);
-			DepthFirstSearch.search(reversedGraph, to, new DepthFirstSearchVisitor()
+			GraphSearch.depthFirstSearch(reversedGraph, to, new DepthFirstSearchVisitor()
 			{
 				@Override
 				public boolean onVisit(int from)

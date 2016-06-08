@@ -1,6 +1,6 @@
 package gfpa.graph.concrete;
 
-import gfpa.graph.search.DepthFirstSearch;
+import gfpa.graph.search.GraphSearch;
 import gfpa.graph.search.DepthFirstSearchVisitor;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
@@ -25,7 +25,7 @@ public class DominanceFrontier
 	private void buildDominanceFrontier(int root, ControlFlowGraph cfgraph, DominatorTree domtree)
 	{
 		TIntList list = new TIntArrayList();
-		DepthFirstSearch.search(domtree, root, new DepthFirstSearchVisitor()
+		GraphSearch.depthFirstSearch(domtree, root, new DepthFirstSearchVisitor()
 		{
 			@Override
 			public boolean onVisit(int id)
