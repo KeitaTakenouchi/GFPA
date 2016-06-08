@@ -2,8 +2,8 @@ package gfpa.graph.concrete;
 
 
 import gfpa.graph.common.LabeledDirectedGraph;
-import gfpa.graph.search.GraphSearch;
 import gfpa.graph.search.EdgeVisitor;
+import gfpa.graph.search.GraphSearch;
 import gnu.trove.list.linked.TIntLinkedList;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -198,11 +198,9 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 			worklist.add(i);
 			workSet.add(i);
 		}
-		System.out.println("\nSTART \t:"+cfgraph.size());
-		int count= 0;
+
 		while(!workSet.isEmpty())
 		{
-			count++;
 			int i = worklist.removeAt(0);
 
 			workSet.remove(i);
@@ -234,7 +232,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 				}
 			}
 		}
-		System.out.println("GOAL \t:" + count);
+
 		for(int i = 0 ; i < size ; i++)
 		{
 			int to = nodes[i];
