@@ -152,4 +152,25 @@ public class GraphSearch {
 		});
 		return ret.toArray();
 	}
+
+	public static int[] widthFirstOrderArray(DirectedGraph graph, int startId)
+	{
+		TIntList ret = new TIntArrayList();
+		widthFirstSearch(graph, startId, new GraphSearchVisitor()
+		{
+			@Override
+			public boolean onVisit(int id)
+			{
+				ret.add(id);
+				return true;
+			}
+
+			@Override
+			public boolean onLeave(int id)
+			{
+				return true;
+			}
+		});
+		return ret.toArray();
+	}
 }

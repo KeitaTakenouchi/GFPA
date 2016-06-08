@@ -145,7 +145,7 @@ public class DataDependenceGraph<V> extends LabeledDirectedGraph<V>
 	 */
 	public void buildEdgesWithSingleDef()
 	{
-		int[] nodes = GraphSearch.depthFirstOrderArray(cfgraph, cfgraph.getEntryId());
+		int[] nodes = GraphSearch.widthFirstOrderArray(cfgraph, cfgraph.getEntryId());
 		int size = nodes.length;
 
 		//map : node id -> index
